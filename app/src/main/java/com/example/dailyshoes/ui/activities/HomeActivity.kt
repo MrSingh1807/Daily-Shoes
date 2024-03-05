@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -43,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
+import com.example.dailyshoes.ui.designUtils.CurvedTopLineShape
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
@@ -55,7 +55,7 @@ class HomeActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DailyShoesTheme {
-
+                HomeScreen()
             }
         }
     }
@@ -79,17 +79,14 @@ class HomeActivity : ComponentActivity() {
             BrandBar()
 
             Symbols(first = "Popular Shoes")
-//            LazyRow {
-//
-//            }
 
-            Row(
+            Row(  // future update this with LazyRow
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                ShoesBox("Best Seller", "Nike Jordan", 493.00, R.drawable.ic_shoe_1)
-                ShoesBox("Best Seller", "Nike Air Max", 897.00, R.drawable.ic_shoe_2)
+                ShoesBox("Best Seller", "Nike Jordan", 493.00, R.drawable.ic_shoe_2)
+                ShoesBox("Best Seller", "Nike Air Max", 897.00, R.drawable.ic_shoe_1)
             }
 
             Symbols(first = "New Arrivals")
@@ -456,11 +453,20 @@ class HomeActivity : ComponentActivity() {
 
     @Composable
     fun BottomNav() {
-        Row(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier/*.curvedTopLine()*/
+                .fillMaxSize()
+                .padding(top = 20.dp)
+                .background(color = Color.White)
+        ) {
+//            Text(text = "Item 1", modifier = Modifier.curvedTopLine().background(color = Color.Blue).fillMaxWidth())
 
         }
     }
 
+    fun Modifier.curvedTopLine(): Modifier = this.then(
+        Modifier.clip(CurvedTopLineShape())
+    )
 
     @Preview
     @Composable
