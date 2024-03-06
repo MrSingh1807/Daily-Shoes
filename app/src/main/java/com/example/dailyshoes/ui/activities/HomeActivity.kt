@@ -381,7 +381,7 @@ class HomeActivity : ComponentActivity() {
                     Text(
                         text = "$$shoePrice", style = TextStyle(
                             fontFamily = Poppins_MEDIUM, fontSize = 16.sp
-                        ), modifier = Modifier.constrainAs(shoePriceText) {
+                        ), modifier = Modifier.padding(top = 10.dp).constrainAs(shoePriceText) {
                             start.linkTo(shoeNameText.start)
                             top.linkTo(shoeNameText.bottom)
                         }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -49,19 +54,34 @@ class FavouriteScreenDesign {
                 )
         ) {
 
-            TitleBar({})
-            FavItem(
-                tag = "BEST SELLER",
-                shoeName = "Nike Air Max",
-                shoePrice = 37.00,
-                img = R.drawable.item_details_1
+            TitleBar({ }, {})
+            val dummyList = listOf(
+                "Item 1", "Item 2", "Item 3", "Item 4"
             )
+
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp)
+            ) {
+                items(dummyList) {
+                    FavItem(
+                        tag = "BEST SELLER",
+                        shoeName = "Nike Air Max",
+                        shoePrice = 37.00,
+                        img = R.drawable.item_details_1
+                    )
+                }
+            }
+
 
         }
     }
 
     @Composable
-    fun TitleBar(favClick: () -> Unit) {
+    fun TitleBar(backPressed: () -> Unit, favClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -75,7 +95,7 @@ class FavouriteScreenDesign {
                 modifier = Modifier
                     .width(50.dp)
                     .height(50.dp)
-                    .clickable { },
+                    .clickable { backPressed.invoke() },
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Drawer"
             )
@@ -101,7 +121,7 @@ class FavouriteScreenDesign {
         tag: String, shoeName: String,
         shoePrice: Double, img: Int,
         itemClick: () -> Unit = {},
-        plusClick: () -> Unit = {}
+        favClick: () -> Unit = {}
     ) {
         val screenWid = LocalConfiguration.current.screenWidthDp / 2
         Card(
@@ -113,70 +133,92 @@ class FavouriteScreenDesign {
                 .clickable(onClick = itemClick),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+                val (tagText, shoeNameText, bottomPrice, shoeImage, favImg) = createRefs()
+
                 Image(
                     painter = painterResource(id = img), contentDescription = "Shoe Image",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
+                        .constrainAs(shoeImage) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                        }
                 )
 
-                ConstraintLayout(
+                Image(painter = painterResource(id = R.drawable.ic_fav_unselected),
+                    contentDescription = "favourite",
                     modifier = Modifier
-                        .padding(start = 15.dp)
-                        .fillMaxSize()
-                ) {
-                    val (tagText, shoeNameText, shoePriceText, plusBox, plusImg) = createRefs()
+                        .clickable { favClick }
+                        .padding(top = 10.dp, start = 10.dp)
+                        .constrainAs(favImg) {
+                            top.linkTo(shoeImage.top)
+                            start.linkTo(shoeImage.start)
+                        })
 
-                    Text(
-                        text = tag.uppercase(), style = TextStyle(
-                            fontSize = 13.sp, fontFamily = Poppins_Regular,
-                            color = colorResource(id = R.color.intro_get_started)
-                        ),
-                        modifier = Modifier
-                            .constrainAs(tagText) {
-                                start.linkTo(parent.start)
-                                top.linkTo(parent.top)
-                            }
-                    )
-                    Text(
-                        text = shoeName, style = TextStyle(
-                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp
-                        ),
-                        modifier = Modifier.constrainAs(shoeNameText) {
-                            start.linkTo(tagText.start)
-                            top.linkTo(tagText.bottom)
+                val modifier = Modifier.padding(horizontal = 15.dp)
+                Text(
+                    text = tag.uppercase(), style = TextStyle(
+                        fontSize = 13.sp, fontFamily = Poppins_Regular,
+                        color = colorResource(id = R.color.intro_get_started)
+                    ),
+                    modifier = modifier
+                        .constrainAs(tagText) {
+                            start.linkTo(shoeImage.start)
+                            top.linkTo(shoeImage.bottom)
                         }
-                    )
+                )
+                Text(
+                    text = shoeName, style = TextStyle(
+                        fontFamily = Poppins_MEDIUM, fontSize = 16.sp
+                    ),
+                    modifier = modifier.constrainAs(shoeNameText) {
+                        start.linkTo(tagText.start)
+                        top.linkTo(tagText.bottom)
+                    }
+                )
+
+                Row(modifier = modifier
+                    .padding(top = 10.dp, bottom = 5.dp)
+                    .constrainAs(bottomPrice) {
+                        start.linkTo(shoeNameText.start)
+                        top.linkTo(shoeNameText.bottom)
+                        bottom.linkTo(parent.bottom)
+                    }) {
                     Text(
                         text = "$$shoePrice", style = TextStyle(
                             fontFamily = Poppins_MEDIUM, fontSize = 16.sp
-                        ), modifier = Modifier.constrainAs(shoePriceText) {
-                            start.linkTo(shoeNameText.start)
-                            top.linkTo(shoeNameText.bottom)
-                        }
-                    )
-
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(45.dp)
-                            .clickable(onClick = plusClick)
-                            .clip(shape = RoundedCornerShape(topStart = 20.dp))
-                            .background(color = colorResource(id = R.color.intro_get_started))
-                            .constrainAs(plusBox) {
-                                end.linkTo(parent.end)
-                                bottom.linkTo(parent.bottom)
-                            }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_plus),
-                            contentDescription = "plus",
-                            modifier = Modifier.wrapContentSize()
                         )
-                    }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    ShoeColor(R.color.light_yellow)
+                    ShoeColor(R.color.shadow_green)
+
                 }
+
             }
+        }
+    }
+
+    @Composable
+    fun ShoeColor(color: Int) {
+        Card(
+            modifier = Modifier
+                .width(20.dp)
+                .height(20.dp)
+                .padding(start = 5.dp, top = 5.dp)
+                .clickable { },
+            shape = CircleShape,
+            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.fav_shoe_shadow)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(1.75.dp)
+                    .background(colorResource(id = color), shape = CircleShape),
+            )
         }
     }
 

@@ -87,7 +87,7 @@ class ItemDetailsScreen {
                         about = about
                     )
 
-                    Gallery(dummyList, {})
+//                    Gallery(dummyList, {})
                     Size()
                 }
 
