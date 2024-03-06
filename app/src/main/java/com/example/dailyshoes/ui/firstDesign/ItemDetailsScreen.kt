@@ -58,20 +58,22 @@ class ItemDetailsScreen {
                     colorResource(id = R.color.home_background),
                 )
         ) {
-            val (centerScroll, bottomBar) = createRefs()
-
+            val (titleBar, centerScroll, bottomBar) = createRefs()
+            val modifier = Modifier.constrainAs(titleBar) {
+                top.linkTo(parent.top)
+            }
+            TitleBar(modifier)
+            
             Column(
                 modifier = Modifier
                     .wrapContentSize()
                     .constrainAs(centerScroll) {
-                        top.linkTo(parent.top)
+                        top.linkTo(titleBar.bottom)
                         bottom.linkTo(bottomBar.top)
                     }
                     .verticalScroll(rememberScrollState())
             ) {
-                TitleBar()
                 ItemImage(img = R.drawable.item_details_1)
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -102,7 +104,7 @@ class ItemDetailsScreen {
     }
 
     @Composable
-    fun TitleBar(cartClick: () -> Unit = {}) {
+    fun TitleBar(modifier: Modifier, cartClick: () -> Unit = {}) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
