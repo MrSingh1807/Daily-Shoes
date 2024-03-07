@@ -37,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
@@ -246,6 +247,18 @@ class CartScreen {
 
             Spacer(modifier = modifier.height(10.dp))
 
+            Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)) {
+                val arr = (1..50).toList()
+                arr.forEach {
+                    Image(
+                        painter = painterResource(id = R.drawable.divide_line),
+                        contentDescription = "",
+                        modifier = Modifier.padding(horizontal = 1.5.dp)
+                    )
+                }
+            }
+
+
             Row(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -264,7 +277,8 @@ class CartScreen {
             Button(
                 onClick = checkout,
                 modifier = Modifier
-                    .fillMaxWidth().padding(vertical = 15.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 15.dp)
                     .padding(horizontal = 20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.intro_get_started))
             ) {
