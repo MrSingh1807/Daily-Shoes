@@ -1,5 +1,6 @@
 package com.example.dailyshoes.ui.firstDesign
 
+import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,7 +61,7 @@ class CartScreen {
             val modifier = Modifier.constrainAs(titleBar) {
                 top.linkTo(parent.top)
             }
-            TitleBar(modifier)
+            TitleBar("My Cart", modifier)
 
             LazyColumn(
                 modifier = Modifier
@@ -80,43 +81,6 @@ class CartScreen {
             })
 
 
-        }
-    }
-
-    @Composable
-    fun TitleBar(
-        modifier: Modifier = Modifier,
-        backPressed: () -> Unit = {},
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-                .wrapContentHeight()
-                .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Image(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .clickable { backPressed.invoke() },
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = "Drawer"
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = "My Cart",
-                fontFamily = Poppins_MEDIUM,
-                textAlign = TextAlign.Center,
-            )
-
-            Box(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-            )
         }
     }
 
@@ -204,6 +168,45 @@ class CartScreen {
 
 
     companion object {
+
+        @Composable
+        fun TitleBar(
+            title: String,
+            modifier: Modifier = Modifier,
+            backPressed: () -> Unit = {},
+        ) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .wrapContentHeight()
+                    .padding(horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Image(
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .clickable { backPressed.invoke() },
+                    painter = painterResource(id = R.drawable.ic_back),
+                    contentDescription = "Drawer"
+                )
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    fontFamily = Poppins_MEDIUM,
+                    textAlign = TextAlign.Center,
+                )
+
+                Box(
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                )
+            }
+        }
+
         @Composable
         fun CheckoutBottomBar(
             modifier: Modifier,

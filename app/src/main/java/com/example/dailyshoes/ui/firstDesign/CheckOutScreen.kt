@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.firstDesign.CartScreen.Companion.CheckoutBottomBar
+import com.example.dailyshoes.ui.firstDesign.CartScreen.Companion.TitleBar
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 
@@ -50,7 +51,7 @@ class CheckOutScreen {
                     colorResource(id = R.color.home_background),
                 )
         ) {
-            TitleBar()
+            TitleBar("Checkout")
             ContactInfo()
 
             Spacer(modifier = Modifier.weight(1f))
@@ -59,44 +60,6 @@ class CheckOutScreen {
 
         }
     }
-
-    @Composable
-    fun TitleBar(
-        modifier: Modifier = Modifier,
-        backPressed: () -> Unit = {},
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-                .wrapContentHeight()
-                .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Image(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .clickable { backPressed.invoke() },
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = "Drawer"
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = "Checkout",
-                fontFamily = Poppins_MEDIUM,
-                textAlign = TextAlign.Center,
-            )
-
-            Box(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-            )
-        }
-    }
-
 
     @Composable
     fun ContactInfo(
