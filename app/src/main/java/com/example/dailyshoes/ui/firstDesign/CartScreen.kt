@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,7 +35,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
@@ -78,7 +75,7 @@ class CartScreen {
                 }
             }
 
-            BottomBar(modifier = Modifier.constrainAs(bottomBar) {
+            CheckoutBottomBar(modifier = Modifier.constrainAs(bottomBar) {
                 bottom.linkTo(parent.bottom)
             })
 
@@ -113,6 +110,12 @@ class CartScreen {
                 text = "My Cart",
                 fontFamily = Poppins_MEDIUM,
                 textAlign = TextAlign.Center,
+            )
+
+            Box(
+                modifier = Modifier
+                    .width(50.dp)
+                    .height(50.dp)
             )
         }
     }
@@ -200,93 +203,96 @@ class CartScreen {
     }
 
 
-    @Composable
-    fun BottomBar(
-        modifier: Modifier,
-        subTotal: Double = 1240.34,
-        shippingCost: Double = 40.34,
-        totalCost: Double = 1280.34,
-        checkout: () -> Unit = {},
-    ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(
-                    color = Color.White, shape = RoundedCornerShape(30.dp)
-                )
+    companion object {
+        @Composable
+        fun CheckoutBottomBar(
+            modifier: Modifier,
+            subTotal: Double = 1240.34,
+            shippingCost: Double = 40.34,
+            totalCost: Double = 1280.34,
+            btnText: String = "Checkout",
+            checkout: () -> Unit = {},
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 20.dp),
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = Color.White, shape = RoundedCornerShape(30.dp)
+                    )
             ) {
-                Text(
-                    text = "Subtotal",
-                    style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Gray)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "$$subTotal",
-                    style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            ) {
-                Text(
-                    text = "Shipping Cost",
-                    style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Gray)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "$$shippingCost",
-                    style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
-                )
-            }
-
-            Spacer(modifier = modifier.height(10.dp))
-
-            Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)) {
-                val arr = (1..50).toList()
-                arr.forEach {
-                    Image(
-                        painter = painterResource(id = R.drawable.divide_line),
-                        contentDescription = "",
-                        modifier = Modifier.padding(horizontal = 1.5.dp)
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 20.dp),
+                ) {
+                    Text(
+                        text = "Subtotal",
+                        style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Gray)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "$$subTotal",
+                        style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
                     )
                 }
-            }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                ) {
+                    Text(
+                        text = "Shipping Cost",
+                        style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Gray)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "$$shippingCost",
+                        style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
+                    )
+                }
+
+                Spacer(modifier = modifier.height(10.dp))
+
+                Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)) {
+                    val arr = (1..50).toList()
+                    arr.forEach {
+                        Image(
+                            painter = painterResource(id = R.drawable.divide_line),
+                            contentDescription = "",
+                            modifier = Modifier.padding(horizontal = 1.5.dp)
+                        )
+                    }
+                }
 
 
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            ) {
-                Text(
-                    text = "Total Cost",
-                    style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Black)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "$$totalCost",
-                    style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
-                )
-            }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                ) {
+                    Text(
+                        text = "Total Cost",
+                        style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Black)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "$$totalCost",
+                        style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
+                    )
+                }
 
-            Button(
-                onClick = checkout,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 15.dp)
-                    .padding(horizontal = 20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.intro_get_started))
-            ) {
-                Text(text = "Checkout", style = TextStyle(fontFamily = Poppins_SEMI_BOLD))
+                Button(
+                    onClick = checkout,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 15.dp)
+                        .padding(horizontal = 20.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.intro_get_started))
+                ) {
+                    Text(text = btnText, style = TextStyle(fontFamily = Poppins_SEMI_BOLD))
+                }
             }
         }
-    }
 
+    }
 
     @Preview(showBackground = true)
     @Composable
