@@ -25,6 +25,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,7 +48,7 @@ import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
 class ItemDetailsScreen {
 
     var defaultCity by mutableStateOf("EU")
-    var selectedSize by mutableStateOf(38)
+    var selectedSize by mutableIntStateOf(38)
 
     @Composable
     fun ItemDetails() {
