@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -50,12 +51,6 @@ class TrackOrder {
         ) {
             val orderID = "123456"
             TitleBar("Order #$orderID")
-
-            val demoList = listOf(
-                "Delivered on " to "15.05.21",
-                "Tracking Number " to "123456789"
-            )
-
             About()
 
             val statusList = listOf(
@@ -232,19 +227,20 @@ class TrackOrder {
 
         @Composable
         fun RatingBar(
-            modifier: Modifier = Modifier,
+            rowModifier: Modifier = Modifier,
+            starModifier: Modifier = Modifier,
             rateCount: Int = 3,
             maxRate: Int = 5,
             onRate: (Int) -> Unit = {}
         ) {
-            Row {
+            Row(modifier = rowModifier, horizontalArrangement = Arrangement.Center) {
                 (1..maxRate).forEach {
                     val painterIcon =
                         if (it <= rateCount) R.drawable.ic_selected_start else R.drawable.rating_icon
                     Image(
                         painter = painterResource(id = painterIcon),
                         contentDescription = "Rate Star",
-                        modifier = modifier
+                        modifier = starModifier
                             .padding(end = 3.dp)
                             .clickable { onRate.invoke(it) },
                     )
