@@ -79,7 +79,7 @@ class OrderDetails {
                 .clickable { },
             colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.intro_get_started)),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            shape = RoundedCornerShape(30.dp)
+            shape = RoundedCornerShape(25.dp)
         ) {
             Row(
                 modifier = Modifier
