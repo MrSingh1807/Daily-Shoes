@@ -1,7 +1,10 @@
 package com.example.dailyshoes.ui.firstDesign.orderScreens
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +16,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,12 +32,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.Glide
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.firstDesign.CartScreen
 import com.example.dailyshoes.ui.firstDesign.orderScreens.TrackOrder.Companion.RatingBar
@@ -63,6 +75,16 @@ class RateProduct {
             )
 
             SearchBar()
+            PickImage()
+            Button(
+                onClick = { }, modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.intro_get_started))
+            ) {
+                Text(text = "Submit Review", style = TextStyle(fontFamily = Poppins_MEDIUM))
+            }
+
         }
     }
 
@@ -126,7 +148,8 @@ class RateProduct {
                 onValueChange = { newText -> },
                 colors = textFieldColors,
                 modifier = Modifier
-                    .fillMaxWidth().height(250.dp)
+                    .fillMaxWidth()
+                    .height(250.dp)
                     .background(color = Color.White),
                 textStyle = TextStyle(
                     fontFamily = Poppins_Regular,
@@ -135,6 +158,40 @@ class RateProduct {
 
             )
         }
+    }
+
+    @Composable
+    fun PickImage(pickedImages: List<Bitmap> = emptyList()) {
+
+        Row(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth()
+                .height(50.dp),
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_open_gallery),
+                contentDescription = "Open Camera"
+            )
+
+            Image(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                painter = painterResource(id = R.drawable.ic_open_camera),
+                contentDescription = "Open Camera"
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(pickedImages) {
+                    Image(
+                        bitmap = it.asImageBitmap(),
+                        contentDescription = "Open Camera"
+                    )
+                }
+            }
+        }
+
+
     }
 
     @Preview(showBackground = true)
