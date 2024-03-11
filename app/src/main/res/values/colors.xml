@@ -11,6 +11,8 @@
     <color name="intro_get_started">#5B9EE1</color>
     <color name="intro_small_line">#E5EEF7</color>
     <color name="home_background">#EDF6FB</color>
+    <color name="side_menu_background">#1A2530</color>
+    <color name="side_menu_text">#707B81</color>
 
     <color name="fav_shoe_shadow">#E8E8EA</color>
     <color name="light_yellow">#FDFFA7</color>

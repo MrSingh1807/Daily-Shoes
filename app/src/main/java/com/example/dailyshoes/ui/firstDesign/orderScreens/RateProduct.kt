@@ -1,13 +1,10 @@
 package com.example.dailyshoes.ui.firstDesign.orderScreens
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,17 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.Glide
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.firstDesign.CartScreen
 import com.example.dailyshoes.ui.firstDesign.orderScreens.TrackOrder.Companion.RatingBar
@@ -161,7 +154,11 @@ class RateProduct {
     }
 
     @Composable
-    fun PickImage(pickedImages: List<Bitmap> = emptyList()) {
+    fun PickImage(
+        onCameraClick: () -> Unit = {},
+        onGalleryClick: () -> Unit = {},
+        pickedImages: List<Bitmap> = emptyList()
+    ) {
 
         Row(
             modifier = Modifier
@@ -170,12 +167,15 @@ class RateProduct {
                 .height(50.dp),
         ) {
             Image(
+                modifier = Modifier.clickable { onGalleryClick.invoke() },
                 painter = painterResource(id = R.drawable.ic_open_gallery),
                 contentDescription = "Open Camera"
             )
 
             Image(
-                modifier = Modifier.padding(horizontal = 10.dp),
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .clickable { onCameraClick.invoke() },
                 painter = painterResource(id = R.drawable.ic_open_camera),
                 contentDescription = "Open Camera"
             )
