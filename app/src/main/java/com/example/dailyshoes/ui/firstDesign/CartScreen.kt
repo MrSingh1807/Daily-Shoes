@@ -173,6 +173,7 @@ class CartScreen {
         fun TitleBar(
             title: String,
             modifier: Modifier = Modifier,
+            img2: Int? = null,
             backPressed: () -> Unit = {},
         ) {
             Row(
@@ -199,10 +200,16 @@ class CartScreen {
                     textAlign = TextAlign.Center,
                 )
 
-                Box(
+                val height = if (img2 != null) 50.dp else 0.dp
+                val secImg = img2 ?: R.drawable.ic_back
+                Image(
                     modifier = Modifier
                         .width(50.dp)
-                        .height(50.dp)
+                        .height(height)
+                        .padding(10.dp)
+                        .clickable { backPressed.invoke() },
+                    painter = painterResource(id = secImg),
+                    contentDescription = "Drawer"
                 )
             }
         }
