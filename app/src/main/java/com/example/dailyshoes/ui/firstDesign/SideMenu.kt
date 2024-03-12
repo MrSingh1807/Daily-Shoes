@@ -117,11 +117,6 @@ class SideMenu {
                     ),
             )
             Function(image = R.drawable.ic_side_sign_out, title = "Sign Out")
-//            Function(image = R.drawable.ic_side_profile, title = "Profile")
-//            Function(image = R.drawable.ic_side_profile, title = "Profile")
-//            Function(image = R.drawable.ic_side_profile, title = "Profile")
-//            Function(image = R.drawable.ic_side_profile, title = "Profile")
-//            Function(image = R.drawable.ic_side_profile, title = "Profile")
         }
     }
 
