@@ -98,7 +98,7 @@ class IntroActivity : ComponentActivity() {
                     painter = painterResource(id = R.drawable.intro_1), contentDescription = "",
                     modifier = Modifier
                         .padding(top = 160.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth().height(300.dp)
                         .wrapContentHeight()
                         .constrainAs(introImg) {
                             top.linkTo(parent.top)

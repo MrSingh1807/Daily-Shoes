@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -105,6 +106,7 @@ class SignIn {
                 Text(
                     text = title2,
                     style = TextStyle(fontFamily = Poppins_Regular, color = Color.Gray),
+                    textAlign = TextAlign.Center
                 )
 
             }
@@ -181,7 +183,7 @@ class SignIn {
 
         @Composable
         fun BottomButtons(
-            btmButton1: String ,
+            btmButton1: String,
             btmButton2: String,
             signInClick: () -> Unit = {},
             signInWithGoogleClick: () -> Unit = {},
