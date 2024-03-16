@@ -32,10 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
-import com.example.dailyshoes.ui.firstDesign.CartScreen
+import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
-import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
 
 
 class SignIn {
@@ -50,7 +49,7 @@ class SignIn {
                 ),
         ) {
 
-            CartScreen.TitleBar("")
+            TitleBar("")
             AuthTitle(title1 = "Hello Again!", title2 = "Welcome Back You’ve Been Missed!")
             Column(
                 modifier = Modifier.padding(top = 50.dp),

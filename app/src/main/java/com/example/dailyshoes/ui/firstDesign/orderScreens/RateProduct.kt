@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyshoes.R
-import com.example.dailyshoes.ui.firstDesign.CartScreen
+import com.example.dailyshoes.ui.activities.CartActivity
 import com.example.dailyshoes.ui.firstDesign.orderScreens.TrackOrder.Companion.RatingBar
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
@@ -54,7 +54,7 @@ class RateProduct {
                     colorResource(id = R.color.home_background),
                 ),
         ) {
-            CartScreen.TitleBar("Rate Product")
+            CartActivity.TitleBar("Rate Product")
 
             TrackOrderStatus()
 

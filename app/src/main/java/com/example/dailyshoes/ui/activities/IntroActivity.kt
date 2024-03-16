@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -47,23 +50,26 @@ import com.example.dailyshoes.ui.theme.intro_desc_3
 import com.example.dailyshoes.ui.theme.intro_title_1
 import com.example.dailyshoes.ui.theme.intro_title_2
 import com.example.dailyshoes.ui.theme.intro_title_3
+import com.example.dailyshoes.ui.utils.navigateToActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class IntroActivity : ComponentActivity() {
 
-    var selectedItem by mutableStateOf(0)
     var textTitle by mutableStateOf(intro_title_1)
     var textDesc by mutableStateOf(intro_desc_1)
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            DailyShoesTheme {
-                IntroScreen {
 
+        setContent {
+            val pagerState = rememberPagerState(pageCount = { 3 })
+
+            DailyShoesTheme {
+                HorizontalPager(state = pagerState) { page ->
+                    IntroScreen(page = page)
                 }
             }
         }
@@ -72,7 +78,7 @@ class IntroActivity : ComponentActivity() {
 
     @SuppressLint("UnrememberedMutableState")
     @Composable
-    fun IntroScreen(moveAnotherScreen: () -> Unit) {
+    fun IntroScreen(page: Int, moveAnotherScreen: () -> Unit = {}) {
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -94,11 +100,18 @@ class IntroActivity : ComponentActivity() {
                             end.linkTo(parent.end)
                         }
                 )
+
+                val introImages = when (page) {
+                    1 -> R.drawable.intro_2
+                    2 -> R.drawable.intro_3
+                    else -> R.drawable.intro_1
+                }
                 Image(
-                    painter = painterResource(id = R.drawable.intro_1), contentDescription = "",
+                    painter = painterResource(id = introImages), contentDescription = "",
                     modifier = Modifier
                         .padding(top = 160.dp)
-                        .fillMaxWidth().height(300.dp)
+                        .fillMaxWidth()
+                        .height(300.dp)
                         .wrapContentHeight()
                         .constrainAs(introImg) {
                             top.linkTo(parent.top)
@@ -125,10 +138,6 @@ class IntroActivity : ComponentActivity() {
                     .weight(1f)
             )
 
-            val selectedColor = R.color.intro_get_started
-            val unSelected = R.color.intro_small_line
-            val selectedWidth = 50
-            val unSelectedWidth = 10
 
             Row(
                 modifier = Modifier
@@ -137,33 +146,20 @@ class IntroActivity : ComponentActivity() {
                 verticalAlignment = Alignment.CenterVertically, // Aligns items vertically
                 horizontalArrangement = Arrangement.Center
             ) {
-                BottomChip(selectedColor, unSelected, selectedWidth, unSelectedWidth, selectedItem)
+
+                val selectedColor = R.color.intro_get_started
+                val unSelected = R.color.intro_small_line
+                val selectedWidth = 50
+                val unSelectedWidth = 10
+
+                BottomChip(selectedColor, unSelected, selectedWidth, unSelectedWidth, page)
                 Spacer(
                     modifier = Modifier
                         .width(0.dp)
                         .weight(1f)
                 )
                 Button(
-                    onClick = {
-                        if (selectedItem > 2) selectedItem = 0 else selectedItem++
-                        Log.d("Mr_Singh", "selectedItem: $selectedItem")
-                        when (selectedItem) {
-                            0 -> {
-                                textTitle = intro_title_1
-                                textDesc = intro_desc_1
-                            }
-
-                            1 -> {
-                                textTitle = intro_title_2
-                                textDesc = intro_desc_2
-                            }
-
-                            2 -> {
-                                textTitle = intro_title_3
-                                textDesc = intro_desc_3
-                            }
-                        }
-                    },
+                    onClick = { navigateToActivity(HomeActivity::class.java) },
                     colors = ButtonDefaults.buttonColors(colorResource(id = R.color.intro_get_started))
                 ) {
                     Text(
@@ -172,23 +168,22 @@ class IntroActivity : ComponentActivity() {
                     )
                 }
             }
+
         }
     }
 
     @Composable
     fun BottomChip(
         selectedColor: Int, unselectedColor: Int,
-        selectedWidth: Int, unselectedWidth: Int,
-        selectedItem: Int
+        selectedWidth: Int, unselectedWidth: Int, page: Int
     ) {
-
         Row {
             Box(
                 modifier = Modifier
                     .height(6.dp)
-                    .width((if (selectedItem == 0) selectedWidth else unselectedWidth).dp)
+                    .width((if (page == 0) selectedWidth else unselectedWidth).dp)
                     .background(
-                        colorResource(if (selectedItem == 0) selectedColor else unselectedColor),
+                        colorResource(if (page == 0) selectedColor else unselectedColor),
                         shape = RoundedCornerShape(2.5.dp)
                     )
             )
@@ -197,9 +192,9 @@ class IntroActivity : ComponentActivity() {
                 modifier = Modifier
                     .height(6.dp)
                     .padding(start = 5.dp)
-                    .width((if (selectedItem == 1) selectedWidth else unselectedWidth).dp)
+                    .width((if (page == 1) selectedWidth else unselectedWidth).dp)
                     .background(
-                        colorResource(if (selectedItem == 1) selectedColor else unselectedColor),
+                        colorResource(if (page == 1) selectedColor else unselectedColor),
                         shape = RoundedCornerShape(2.5.dp)
                     )
             )
@@ -208,9 +203,9 @@ class IntroActivity : ComponentActivity() {
                 modifier = Modifier
                     .height(6.dp)
                     .padding(start = 5.dp)
-                    .width((if (selectedItem == 2) selectedWidth else unselectedWidth).dp)
+                    .width((if (page == 2) selectedWidth else unselectedWidth).dp)
                     .background(
-                        colorResource(if (selectedItem == 2) selectedColor else unselectedColor),
+                        colorResource(if (page == 2) selectedColor else unselectedColor),
                         shape = RoundedCornerShape(2.5.dp)
                     )
             )
@@ -224,7 +219,7 @@ class IntroActivity : ComponentActivity() {
     @Composable
     fun DefaultPreview() {
         DailyShoesTheme {
-            IntroScreen({})
+            IntroScreen(0)
         }
     }
 }

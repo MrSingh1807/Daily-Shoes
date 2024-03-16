@@ -1,5 +1,8 @@
-package com.example.dailyshoes.ui.firstDesign
+package com.example.dailyshoes.ui.activities
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,15 +43,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
+import com.example.dailyshoes.ui.theme.DailyShoesTheme
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
+import com.example.dailyshoes.ui.utils.navigateToActivity
 
 
-class ItemDetailsScreen {
+class AboutShoeActivity : ComponentActivity() {
 
     var defaultCity by mutableStateOf("EU")
     var selectedSize by mutableIntStateOf(38)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            DailyShoesTheme {
+                ItemDetails()
+            }
+        }
+    }
+
 
     @Composable
     fun ItemDetails() {
@@ -63,8 +79,7 @@ class ItemDetailsScreen {
             val modifier = Modifier.constrainAs(titleBar) {
                 top.linkTo(parent.top)
             }
-            TitleBar(modifier)
-            
+
             Column(
                 modifier = Modifier
                     .wrapContentSize()
@@ -90,10 +105,14 @@ class ItemDetailsScreen {
                         about = about
                     )
 
-//                    Gallery(dummyList, {})
+                    Gallery(dummyList, {})
                     Size()
                 }
 
+            }
+
+            TitleBar(modifier) {
+                navigateToActivity(CartActivity::class.java)
             }
 
             val btnModifier = Modifier.constrainAs(bottomBar) {
@@ -119,7 +138,7 @@ class ItemDetailsScreen {
                 modifier = Modifier
                     .width(50.dp)
                     .height(50.dp)
-                    .clickable { },
+                    .clickable { onBackPressed() },
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Drawer"
             )
@@ -309,7 +328,7 @@ class ItemDetailsScreen {
                         .clickable { sizeClick.invoke(it); selectedSize = it },
                     shape = CircleShape,
                     colors = CardDefaults.cardColors(containerColor = selectedSizeBoxColor(it)),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -403,13 +422,15 @@ class ItemDetailsScreen {
         ItemDetails()
     }
 
+    companion object {
+        val dummyList = listOf(
+            R.drawable.ic_shoe_1, R.drawable.ic_shoe_2,
+            R.drawable.ic_shoe_1, R.drawable.ic_shoe_2,
+            R.drawable.ic_shoe_1, R.drawable.ic_shoe_2,
+        )
+        val about =
+            "Air Jordan is an American brand of basketball shoes athletic, casual, and style clothing produced by Nike...."
+
+    }
+
 }
-
-
-val dummyList = listOf(
-    R.drawable.ic_shoe_1, R.drawable.ic_shoe_2,
-    R.drawable.ic_shoe_1, R.drawable.ic_shoe_2,
-    R.drawable.ic_shoe_1, R.drawable.ic_shoe_2,
-)
-val about =
-    "Air Jordan is an American brand of basketball shoes athletic, casual, and style clothing produced by Nike...."

@@ -33,12 +33,7 @@ class SplashActivity : ComponentActivity() {
         window.statusBarColor = android.R.color.transparent
         setContent {
             DailyShoesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                Greeting()
             }
         }
 
@@ -48,7 +43,7 @@ class SplashActivity : ComponentActivity() {
     }
 
     @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
+    fun Greeting() {
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
@@ -67,7 +62,7 @@ class SplashActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         DailyShoesTheme {
-            Greeting("Android")
+            Greeting()
         }
     }
 }

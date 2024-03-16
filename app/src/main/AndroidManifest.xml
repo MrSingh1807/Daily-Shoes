@@ -45,6 +45,9 @@
         <activity
             android:name=".ui.activities.SettingActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activities.AboutShoeActivity"
+            android:exported="false" />
 
     </application>
 

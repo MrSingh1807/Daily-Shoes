@@ -11,7 +11,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dailyshoes.R
-import com.example.dailyshoes.ui.firstDesign.CartScreen
+import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
 import com.example.dailyshoes.ui.firstDesign.authScreens.SignIn.Companion.BottomButtons
 
 
@@ -27,7 +27,7 @@ class CreateNewAC {
                 ),
         ) {
 
-            CartScreen.TitleBar("")
+            TitleBar("")
             SignIn.AuthTitle(title1 = "Create Account", title2 = "Let’s Create Account Together")
             Column(
                 modifier = Modifier.padding(top = 50.dp),

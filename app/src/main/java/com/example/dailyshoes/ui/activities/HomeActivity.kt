@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -32,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.Four
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -43,16 +46,18 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.designUtils.CurvedTopLineShape
+import com.example.dailyshoes.ui.modals.Quad
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
+import com.example.dailyshoes.ui.utils.navigateToActivity
 
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             DailyShoesTheme {
                 HomeScreen()
@@ -80,19 +85,28 @@ class HomeActivity : ComponentActivity() {
 
             Symbols(first = "Popular Shoes")
 
-            Row(  // future update this with LazyRow
+            val shoeList = listOf(
+                Quad("Best Seller", "Nike Jordan", 493.00, R.drawable.ic_shoe_2),
+                Quad("Best Seller", "Nike Air Max", 897.00, R.drawable.ic_shoe_1),
+            )
+            LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                ShoesBox("Best Seller", "Nike Jordan", 493.00, R.drawable.ic_shoe_2)
-                ShoesBox("Best Seller", "Nike Air Max", 897.00, R.drawable.ic_shoe_1)
+                items(shoeList) {
+                    ShoesBox(it.t1, it.t2, it.t3, it.t4, itemClick = {
+                        navigateToActivity(AboutShoeActivity::class.java)
+                    })
+                }
             }
 
             Symbols(first = "New Arrivals")
 
             //LazyRow
-            NewArrival("Nike Air Jordan", 849.00, R.drawable.ic_shoe_3)
+            NewArrival("Nike Air Jordan", 849.00, R.drawable.ic_shoe_3) {
+                navigateToActivity(AboutShoeActivity::class.java)
+            }
 
             BottomNav()
         }
@@ -381,10 +395,12 @@ class HomeActivity : ComponentActivity() {
                     Text(
                         text = "$$shoePrice", style = TextStyle(
                             fontFamily = Poppins_MEDIUM, fontSize = 16.sp
-                        ), modifier = Modifier.padding(top = 10.dp).constrainAs(shoePriceText) {
-                            start.linkTo(shoeNameText.start)
-                            top.linkTo(shoeNameText.bottom)
-                        }
+                        ), modifier = Modifier
+                            .padding(top = 10.dp)
+                            .constrainAs(shoePriceText) {
+                                start.linkTo(shoeNameText.start)
+                                top.linkTo(shoeNameText.bottom)
+                            }
                     )
 
                     Box(

@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dailyshoes.R
+import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 
@@ -48,7 +49,7 @@ class AccountAndSettings {
                 ),
         ) {
 
-            CartScreen.TitleBar("Account & Settings")
+            TitleBar("Account & Settings")
 
             Text(
                 text = "Account",
