@@ -1,8 +1,6 @@
 package com.example.dailyshoes.ui.activities
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,31 +41,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
-import com.example.dailyshoes.ui.theme.DailyShoesTheme
+import com.example.dailyshoes.ui.baseClasses.BaseComposeActivity
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
 import com.example.dailyshoes.ui.utils.navigateToActivity
+import com.example.dailyshoes.ui.viewModel.AboutShoeVM
+import dagger.hilt.android.AndroidEntryPoint
 
 
-class AboutShoeActivity : ComponentActivity() {
+@AndroidEntryPoint
+class AboutShoeActivity : BaseComposeActivity() {
 
     var defaultCity by mutableStateOf("EU")
     var selectedSize by mutableIntStateOf(38)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+//    var selectedImg by mutableStateOf(R.drawable.item_details_1)
 
-        setContent {
-            DailyShoesTheme {
-                ItemDetails()
-            }
-        }
-    }
+    val viewModel: AboutShoeVM by viewModels()
 
 
     @Composable
-    fun ItemDetails() {
+    override fun InitScreen() {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -184,7 +179,6 @@ class AboutShoeActivity : ComponentActivity() {
                     .constrainAs(imgBtm) {
                         bottom.linkTo(shoes.bottom)
                     })
-
         }
     }
 
@@ -394,7 +388,7 @@ class AboutShoeActivity : ComponentActivity() {
                     .width(150.dp)
                     .height(50.dp)
                     .padding(end = 20.dp)
-                    .clickable { },
+                    .clickable { dummyDataAdd() },
                 shape = RoundedCornerShape(25.dp),
                 colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.intro_get_started))
             ) {
@@ -411,15 +405,20 @@ class AboutShoeActivity : ComponentActivity() {
                     )
                 }
             }
-
         }
+    }
+
+    fun dummyDataAdd() {
+        viewModel.addShoeOnCart(
+            "Nike Air Jordan", 967.800, 1, "EU", 38, R.drawable.item_details_1
+        )
     }
 
 
     @Preview(showBackground = true)
     @Composable
     fun PreviewItemDetails() {
-        ItemDetails()
+        InitScreen()
     }
 
     companion object {

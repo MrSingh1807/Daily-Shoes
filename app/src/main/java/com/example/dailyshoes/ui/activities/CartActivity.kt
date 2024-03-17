@@ -1,9 +1,6 @@
 package com.example.dailyshoes.ui.activities
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,12 +21,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,29 +33,23 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
-import com.example.dailyshoes.ui.theme.DailyShoesTheme
+import com.example.dailyshoes.ui.baseClasses.BaseComposeActivity
+import com.example.dailyshoes.ui.modals.AboutOrder
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
+import com.example.dailyshoes.ui.viewModel.CartVM
+import dagger.hilt.android.AndroidEntryPoint
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
-class CartActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            DailyShoesTheme {
-                MyCartScreen()
-            }
-        }
-    }
+@AndroidEntryPoint
+class CartActivity : BaseComposeActivity() {
 
-
-    var addedQuantity by mutableIntStateOf(1)
+    val mViewModel: CartVM by viewModels()
 
     @Composable
-    fun MyCartScreen() {
-
+    override fun InitScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -79,23 +66,24 @@ class CartActivity : ComponentActivity() {
                     .padding(top = 10.dp)
                     .weight(1f)
             ) {
-                items(AboutShoeActivity.dummyList) {
-                    CartItem()
+                items(mViewModel.cartList.value) {
+                    CartItem(
+                        it,
+                        removeQuantity = { mViewModel.updateQuantity(it.id, it.quantity - 1) },
+                        addQuantity = { mViewModel.updateQuantity(it.id, it.quantity + 1) },
+                        deleteItem = { mViewModel.deleteShoe(it.id) }
+                    )
                 }
             }
 
-            CheckoutBottomBar()
-
+            CheckoutBottomBar(prices = mViewModel.prices.value)
         }
     }
 
 
     @Composable
     fun CartItem(
-        shoeName: String = "Nike Air Max 97",
-        shoeSize: String = "L",
-        shoeImage: Int = R.drawable.ic_shoe_4,
-        shoePrice: Double = 120.34,
+        aboutOrder: AboutOrder,
         removeQuantity: () -> Unit = {},
         addQuantity: () -> Unit = {},
         deleteItem: () -> Unit = {},
@@ -118,7 +106,7 @@ class CartActivity : ComponentActivity() {
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Image(
-                        painter = painterResource(id = shoeImage),
+                        painter = painterResource(id = R.drawable.ic_shoe_4),
                         contentDescription = ""
                     )
                 }
@@ -126,28 +114,27 @@ class CartActivity : ComponentActivity() {
 
             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
                 Row(modifier = Modifier.padding(vertical = 7.dp)) {
-                    Text(text = shoeName, fontFamily = Poppins_MEDIUM)
+                    Text(text = aboutOrder.orderName, fontFamily = Poppins_MEDIUM)
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = shoeSize,
+                        text = aboutOrder.shoeSize.toString(),
                         fontFamily = Poppins_MEDIUM,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }
 
-                Text(text = "$ $shoePrice", fontFamily = Poppins_MEDIUM)
+                Text(text = "$ ${aboutOrder.price}", fontFamily = Poppins_MEDIUM)
 
                 Row(modifier = Modifier.padding(vertical = 7.dp)) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_remove_item),
                         contentDescription = "RemoveItem",
                         modifier = Modifier.clickable {
-                            addedQuantity--
                             removeQuantity.invoke()
                         }
                     )
                     Text(
-                        text = addedQuantity.toString(),
+                        text = aboutOrder.quantity.toString(),
                         fontFamily = Poppins_MEDIUM,
                         modifier = Modifier.padding(horizontal = 15.dp)
                     )
@@ -155,7 +142,6 @@ class CartActivity : ComponentActivity() {
                         painter = painterResource(id = R.drawable.ic_add_item),
                         contentDescription = "RemoveItem",
                         modifier = Modifier.clickable {
-                            addedQuantity++
                             addQuantity.invoke()
                         }
                     )
@@ -223,9 +209,7 @@ class CartActivity : ComponentActivity() {
         @Composable
         fun CheckoutBottomBar(
             modifier: Modifier = Modifier,
-            subTotal: Double = 1240.34,
-            shippingCost: Double = 40.34,
-            totalCost: Double = 1280.34,
+            prices: Pair<Double, Double> = 1240.34 to 40.34,
             btnText: String = "Checkout",
             checkout: () -> Unit = {},
         ) {
@@ -247,7 +231,7 @@ class CartActivity : ComponentActivity() {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = "$$subTotal",
+                        text = "$${roundOffDecimal(prices.first)}",
                         style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
                     )
                 }
@@ -261,7 +245,7 @@ class CartActivity : ComponentActivity() {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = "$$shippingCost",
+                        text = "$${roundOffDecimal(prices.second)}",
                         style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
                     )
                 }
@@ -290,7 +274,7 @@ class CartActivity : ComponentActivity() {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = "$$totalCost",
+                        text = "$${roundOffDecimal(prices.first + prices.second)}",
                         style = TextStyle(fontFamily = Poppins_SEMI_BOLD, color = Color.Black)
                     )
                 }
@@ -308,12 +292,18 @@ class CartActivity : ComponentActivity() {
             }
         }
 
+        fun roundOffDecimal(number: Double): Double {
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.CEILING
+            return df.format(number).toDouble()
+        }
+
     }
 
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        MyCartScreen()
+        InitScreen()
     }
 
 }

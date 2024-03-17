@@ -52,9 +52,9 @@ class OrderDetails {
             OrderAddress()
 
             val dummyList = listOf(
-                AboutOrder("Sportswear Set", 80, 1),
-                AboutOrder("Cotton T-shirt", 30, 3),
-                AboutOrder("Jeans Pant", 80, 2),
+                AboutOrder("Sportswear Set", 80.0, 1),
+                AboutOrder("Cotton T-shirt", 30.0, 3),
+                AboutOrder("Jeans Pant", 80.0, 2),
             )
             AboutOrder(dummyList)
 
@@ -246,7 +246,7 @@ class OrderDetails {
                         )
                         Text(
                             modifier = Modifier.padding(end = 20.dp),
-                            text = "x ${it.quantity} ",
+                            text = "$ ${it.price} x ${it.quantity} ",
                             style = TextStyle(
                                 fontFamily = Poppins_Regular,
                                 fontSize = 13.sp,
@@ -262,7 +262,7 @@ class OrderDetails {
                     }
                 }
 
-                var subtotal = 0
+                var subtotal = 0.0
                 orderItems.map { it.quantity to it.price }.forEach {
                     subtotal += it.first * it.second
                 }
