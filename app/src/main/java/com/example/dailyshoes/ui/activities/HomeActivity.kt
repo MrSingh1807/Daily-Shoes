@@ -22,13 +22,22 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,6 +117,7 @@ class HomeActivity : ComponentActivity() {
                 navigateToActivity(AboutShoeActivity::class.java)
             }
 
+            Spacer(modifier = Modifier.weight(1f))
             BottomNav()
         }
     }
@@ -469,14 +479,40 @@ class HomeActivity : ComponentActivity() {
 
     @Composable
     fun BottomNav() {
-        Row(
-            modifier = Modifier/*.curvedTopLine()*/
-                .fillMaxSize()
-                .padding(top = 20.dp)
-                .background(color = Color.White)
-        ) {
-//            Text(text = "Item 1", modifier = Modifier.curvedTopLine().background(color = Color.Blue).fillMaxWidth())
 
+        val btmBarList =
+            listOf(
+                "Home" to R.drawable.ic_home_btm_nav,
+                "Favourite" to R.drawable.ic_fav_btm_nav,
+                "Notification" to R.drawable.ic_notification_btm_nav,
+                "Profile" to R.drawable.ic_profile_btm_nav
+            )
+
+        var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
+
+        NavigationBar(
+            modifier = Modifier
+                .fillMaxWidth().height(100.dp).padding(top = 20.dp)
+                .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+            containerColor = Color.White,
+        ) {
+            btmBarList.forEachIndexed { index, pair ->
+                NavigationBarItem(modifier = Modifier.padding(top = 10.dp),
+                    selected = selectedItemIndex == index,
+                    onClick = { },
+                    label = { Text(text = pair.first) },
+                    icon = {
+                        BadgedBox(badge = {
+//                            Badge()
+                        }) {
+                            Icon(
+                                painter = painterResource(id = pair.second),
+                                contentDescription = pair.first
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 
