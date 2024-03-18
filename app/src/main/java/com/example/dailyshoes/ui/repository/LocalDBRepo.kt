@@ -17,7 +17,6 @@ import javax.inject.Inject
 @ViewModelScoped
 class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
 
-
     var cartList = mutableStateOf(listOf<AboutOrder>())
 
 
@@ -25,7 +24,7 @@ class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
         withContext(Dispatchers.IO) {
             val shoes = localDb.getShoesOnCart()
             Log.d("Local DB", "getShoes: $shoes")
-            cartList.value = shoes
+            withContext(Dispatchers.Main) { cartList.value = shoes }
         }
     }
 

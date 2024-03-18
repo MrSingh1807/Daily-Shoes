@@ -1,4 +1,4 @@
-package com.example.dailyshoes.ui.firstDesign
+package com.example.dailyshoes.ui.activities.homeScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,8 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,14 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
+import com.example.dailyshoes.ui.navigation.HomeBottomNav
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
-import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
 
-class NotificationScreen {
+object NotificationScreen {
+    
 
     @Composable
-    fun NotificationDesign() {
+    fun Notification() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -220,11 +219,11 @@ class NotificationScreen {
     }
 
 
-    @Preview(showBackground = true)
-    @Composable
-    fun ShowPreview() {
-        NotificationDesign()
-    }
-
-
 }
+
+@Preview(showBackground = true)
+@Composable
+fun ShowPreview() {
+    NotificationScreen.Notification()
+}
+

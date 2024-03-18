@@ -1,5 +1,6 @@
-package com.example.dailyshoes.ui.firstDesign
+package com.example.dailyshoes.ui.activities.homeScreens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -41,10 +41,11 @@ import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 
 
-class FavouriteScreenDesign {
+object FavouriteScreen {
 
+    @SuppressLint("NotConstructor")
     @Composable
-    fun FavouriteScreen() {
+    fun Favourite() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -221,11 +222,10 @@ class FavouriteScreenDesign {
             )
         }
     }
+}
 
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        FavouriteScreen()
-    }
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    FavouriteScreen.Favourite()
 }

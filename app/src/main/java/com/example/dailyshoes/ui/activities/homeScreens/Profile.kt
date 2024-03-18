@@ -1,4 +1,4 @@
-package com.example.dailyshoes.ui.firstDesign
+package com.example.dailyshoes.ui.activities.homeScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,12 +31,12 @@ import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
 import com.example.dailyshoes.ui.firstDesign.authScreens.SignIn.Companion.AboutUserItem
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 
-class Profile {
+object ProfileScreen {
 
     var profileName by mutableStateOf("Mr Singh")
 
     @Composable
-    fun ProfileScreen() {
+    fun Profile() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,11 +94,10 @@ class Profile {
             AboutUserItem(itemTitle = "Password", itemValue = "**********")
         }
     }
+}
 
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        ProfileScreen()
-    }
+@Preview(showBackground = true)
+@Composable
+fun ProfilePreview() {
+    ProfileScreen.Profile()
 }
