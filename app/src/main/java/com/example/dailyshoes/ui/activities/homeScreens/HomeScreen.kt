@@ -361,7 +361,7 @@ object HomeScreen {
                         .padding(start = 15.dp)
                         .fillMaxSize()
                 ) {
-                    val (tagText, shoeNameText, shoePriceText, plusBox, plusImg) = createRefs()
+                    val (tagText, shoeNameText, shoePriceText, plusBox) = createRefs()
 
                     Text(
                         text = tag.uppercase(), style = TextStyle(

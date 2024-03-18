@@ -1,4 +1,4 @@
-package com.example.dailyshoes.ui.firstDesign.authScreens
+package com.example.dailyshoes.ui.activities.authScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,22 +13,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
-import com.example.dailyshoes.ui.firstDesign.authScreens.SignIn.Companion.AboutUserItem
+import com.example.dailyshoes.ui.activities.authScreens.SignIn.AboutUserItem
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 
-class RecoveryPassword {
+object RecoveryPassword {
 
     @Composable
-    fun RecoveryPassScreen() {
+    fun RecoveryPassScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -37,7 +40,9 @@ class RecoveryPassword {
                 ),
         ) {
 
-            TitleBar("")
+            TitleBar("", backPressed = {
+                navController.popBackStack()
+            })
 
             val title1 = "Recovery Password"
             val title2 = "Please Enter Your Email Address To \nReceive a Verification Code"
@@ -78,11 +83,10 @@ class RecoveryPassword {
         }
     }
 
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun ShowPreview() {
-        RecoveryPassScreen()
-    }
-
+@Preview(showBackground = true)
+@Composable
+fun RecoveryPasswordPreview() {
+    RecoveryPassword.RecoveryPassScreen(rememberNavController())
 }

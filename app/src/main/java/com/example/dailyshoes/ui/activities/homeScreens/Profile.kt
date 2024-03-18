@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
-import com.example.dailyshoes.ui.firstDesign.authScreens.SignIn.Companion.AboutUserItem
+import com.example.dailyshoes.ui.activities.authScreens.SignIn.AboutUserItem
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 
 object ProfileScreen {
@@ -46,7 +46,7 @@ object ProfileScreen {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            TitleBar("Checkout", img2 = R.drawable.ic_profile_edit)
+            TitleBar("Checkout", img2 = R.drawable.ic_profile_edit, backPressed = { })
             ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
                 val (profileImage, imgBox) = createRefs()
                 Image(

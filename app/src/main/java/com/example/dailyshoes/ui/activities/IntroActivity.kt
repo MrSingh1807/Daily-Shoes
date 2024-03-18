@@ -159,7 +159,7 @@ class IntroActivity : ComponentActivity() {
                         .weight(1f)
                 )
                 Button(
-                    onClick = { navigateToActivity(HomeActivity::class.java) },
+                    onClick = { navigateToActivity(AuthActivity::class.java) },
                     colors = ButtonDefaults.buttonColors(colorResource(id = R.color.intro_get_started))
                 ) {
                     Text(

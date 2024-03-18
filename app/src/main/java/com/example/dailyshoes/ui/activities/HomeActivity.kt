@@ -73,8 +73,10 @@ class HomeActivity : ComponentActivity() {
                     label = { Text(text = screen.title) },
                     selected = selectedItemIndex == index,
                     onClick = {
-                        selectedItemIndex = index
-                        navController.navigate(screen.route)
+                        if (selectedItemIndex != index) {
+                            selectedItemIndex = index
+                            navController.navigate(screen.route)
+                        }
                     },
                     icon = {
                         Icon(

@@ -1,4 +1,4 @@
-package com.example.dailyshoes.ui.firstDesign.authScreens
+package com.example.dailyshoes.ui.activities.authScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -10,15 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
-import com.example.dailyshoes.ui.firstDesign.authScreens.SignIn.Companion.BottomButtons
+import com.example.dailyshoes.ui.activities.authScreens.SignIn.BottomButtons
+import com.example.dailyshoes.ui.navigation.AuthNav
 
 
-class CreateNewAC {
+object CreateNewAC {
 
     @Composable
-    fun CreateNewACScreen() {
+    fun CreateNewACScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -27,7 +30,7 @@ class CreateNewAC {
                 ),
         ) {
 
-            TitleBar("")
+            TitleBar("", backPressed = { navController.popBackStack() })
             SignIn.AuthTitle(title1 = "Create Account", title2 = "Let’s Create Account Together")
             Column(
                 modifier = Modifier.padding(top = 50.dp),
@@ -46,15 +49,19 @@ class CreateNewAC {
                 )
             }
 
-            BottomButtons(btmButton1 = "Already have an account? ", btmButton2 = "Sign in")
+            BottomButtons(
+                btmButton1 = "Already have an account? ",
+                btmButton2 = "Sign in",
+                alreadyAccountClick = {
+                    navController.navigate(AuthNav.SignIn.route)
+                })
         }
     }
 
+}
 
-    @Preview
-    @Composable
-    fun CreateNewACScreenPreview() {
-        CreateNewACScreen()
-    }
-
+@Preview(showBackground = true)
+@Composable
+fun CreateNewACScreenPreview() {
+    CreateNewAC.CreateNewACScreen(rememberNavController())
 }

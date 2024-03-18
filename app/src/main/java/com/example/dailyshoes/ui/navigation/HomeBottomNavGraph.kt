@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.dailyshoes.ui.activities.authScreens.CreateNewAC
+import com.example.dailyshoes.ui.activities.authScreens.RecoveryPassword
+import com.example.dailyshoes.ui.activities.authScreens.SignIn
 import com.example.dailyshoes.ui.activities.homeScreens.FavouriteScreen
 import com.example.dailyshoes.ui.activities.homeScreens.HomeScreen
 import com.example.dailyshoes.ui.activities.homeScreens.NotificationScreen
@@ -22,3 +25,16 @@ fun HomeBottomNavGraph(navController: NavHostController) {
         composable(route = HomeBottomNav.Profile.route) { ProfileScreen.Profile() }
     }
 }
+
+@Composable
+fun AuthNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = AuthNav.SignIn.route
+    ) {
+        composable(route = AuthNav.SignIn.route) { SignIn.SignInScreen(navController) }
+        composable(route = AuthNav.SignUp.route) { CreateNewAC.CreateNewACScreen(navController) }
+        composable(route = AuthNav.PasswordRecovery.route) { RecoveryPassword.RecoveryPassScreen(navController) }
+    }
+}
+

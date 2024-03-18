@@ -1,5 +1,6 @@
 package com.example.dailyshoes.ui.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,16 +9,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import com.example.dailyshoes.ui.navigation.AuthNavGraph
+import com.example.dailyshoes.ui.navigation.HomeBottomNavGraph
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
 
 
 class AuthActivity : ComponentActivity() {
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             DailyShoesTheme {
+                val navController = rememberNavController()
 
+                Scaffold {
+                    AuthNavGraph(navController = navController)
+                }
             }
         }
     }
