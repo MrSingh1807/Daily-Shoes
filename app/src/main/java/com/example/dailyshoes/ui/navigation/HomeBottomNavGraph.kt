@@ -11,6 +11,7 @@ import com.example.dailyshoes.ui.activities.homeScreens.FavouriteScreen
 import com.example.dailyshoes.ui.activities.homeScreens.HomeScreen
 import com.example.dailyshoes.ui.activities.homeScreens.NotificationScreen
 import com.example.dailyshoes.ui.activities.homeScreens.ProfileScreen
+import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 
 @Composable
@@ -27,14 +28,23 @@ fun HomeBottomNavGraph(navController: NavHostController) {
 }
 
 @Composable
-fun AuthNavGraph(navController: NavHostController) {
+fun AuthNavGraph(authViewModel: AuthViewModel, navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = AuthNav.SignIn.route
     ) {
         composable(route = AuthNav.SignIn.route) { SignIn.SignInScreen(navController) }
-        composable(route = AuthNav.SignUp.route) { CreateNewAC.CreateNewACScreen(navController) }
-        composable(route = AuthNav.PasswordRecovery.route) { RecoveryPassword.RecoveryPassScreen(navController) }
+        composable(route = AuthNav.SignUp.route) {
+            CreateNewAC.CreateNewACScreen(
+//                authViewModel,
+                navController
+            )
+        }
+        composable(route = AuthNav.PasswordRecovery.route) {
+            RecoveryPassword.RecoveryPassScreen(
+                navController
+            )
+        }
     }
 }
 

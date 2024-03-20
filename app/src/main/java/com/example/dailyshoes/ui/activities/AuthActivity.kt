@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -13,12 +14,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.dailyshoes.ui.navigation.AuthNavGraph
 import com.example.dailyshoes.ui.navigation.HomeBottomNavGraph
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
+import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 
 class AuthActivity : ComponentActivity() {
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    private val authViewModel: AuthViewModel by viewModels()
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,7 +30,7 @@ class AuthActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 Scaffold {
-                    AuthNavGraph(navController = navController)
+                    AuthNavGraph(authViewModel, navController = navController)
                 }
             }
         }

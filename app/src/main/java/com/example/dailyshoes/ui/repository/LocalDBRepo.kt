@@ -8,8 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.dailyshoes.ui.dao.LocalDBDao
 import com.example.dailyshoes.ui.modals.AboutOrder
+import com.example.dailyshoes.ui.modals.User
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -19,6 +21,32 @@ class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
 
     var cartList = mutableStateOf(listOf<AboutOrder>())
 
+    suspend fun saveUserDetails(name: String, email: String, password: String) {
+        withContext(Dispatchers.IO) {
+            localDb.addUser(User(name, email, password))
+        }
+    }
+
+    suspend fun getUsers(aboutUsers: (List<User>) -> Unit) {
+        withContext(Dispatchers.IO) {
+            val users = localDb.getUsers()
+            aboutUsers.invoke(users)
+            Log.d("Local DB", "getUsers: $users")
+        }
+    }
+
+    suspend fun updatePassword(email: String, password: String, updated: (Boolean) -> Unit) {
+        withContext(Dispatchers.IO) {
+            launch { localDb.updateUserPassword(email, password) }.join()
+
+            getUsers {
+                it.forEach { user ->
+                    if (user.email == email)
+                        if (user.password == password) updated.invoke(true)
+                }
+            }
+        }
+    }
 
     suspend fun getShoes() {
         withContext(Dispatchers.IO) {

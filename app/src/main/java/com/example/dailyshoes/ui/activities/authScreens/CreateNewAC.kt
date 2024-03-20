@@ -1,12 +1,16 @@
 package com.example.dailyshoes.ui.activities.authScreens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,12 +20,15 @@ import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
 import com.example.dailyshoes.ui.activities.authScreens.SignIn.BottomButtons
 import com.example.dailyshoes.ui.navigation.AuthNav
+import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 
 object CreateNewAC {
 
+    lateinit var authViewModel: AuthViewModel
+
     @Composable
-    fun CreateNewACScreen(navController: NavHostController) {
+    fun CreateNewACScreen(/*authViewModel: AuthViewModel,*/ navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -30,31 +37,76 @@ object CreateNewAC {
                 ),
         ) {
 
+            val emailErrorVisible = remember { mutableStateOf(false) }
+            val passErrorVisible = remember { mutableStateOf(false) }
+
+            val name = remember { mutableStateOf("") }
+            val email = remember { mutableStateOf("") }
+            val password = remember { mutableStateOf("") }
+
+            val mContext = LocalContext.current
+
+
             TitleBar("", backPressed = { navController.popBackStack() })
             SignIn.AuthTitle(title1 = "Create Account", title2 = "Let’s Create Account Together")
             Column(
                 modifier = Modifier.padding(top = 50.dp),
             ) {
-                SignIn.AboutUserItem()
+                SignIn.AboutUserItem(editableValue = {
+                    name.value = it
+                })
                 Spacer(modifier = Modifier.padding(15.dp))
                 SignIn.AboutUserItem(
                     itemTitle = "Email Address",
-                    itemValue = "AlissonBecker@gmail.com"
+                    itemValue = "AlissonBecker@gmail.com",
+                    isErrorVisible = emailErrorVisible.value,
+                    editableValue = {
+                        if (authViewModel.isValidEmail(it)) {
+                            emailErrorVisible.value = false
+                            email.value = it
+                        } else emailErrorVisible.value = true
+
+                    }
                 )
                 Spacer(modifier = Modifier.padding(15.dp))
                 SignIn.AboutUserItem(
                     itemTitle = "Password",
                     itemValue = " ******** ",
-                    passwordVisibleIcon = R.drawable.ic_password_invisible
+                    passwordVisibleIcon = R.drawable.ic_password_invisible,
+                    isErrorVisible = passErrorVisible.value,
+                    editableValue = {
+                        if (authViewModel.isValidPassword(it)) {
+                            passErrorVisible.value = false
+                            password.value = it
+                        } else passErrorVisible.value = true
+                    }
                 )
             }
 
             BottomButtons(
-                btmButton1 = "Already have an account? ",
-                btmButton2 = "Sign in",
+                authButtonText = "Sign Up",
+                bottomButtonText = "Already have an account? " to "Sign In",
                 alreadyAccountClick = {
                     navController.navigate(AuthNav.SignIn.route)
-                })
+                },
+                signInClick = {
+                    val condition = !emailErrorVisible.value || !passErrorVisible.value
+                            || name.value.isNotEmpty() || email.value.isNotEmpty() || password.value.isNotEmpty()
+                    if (condition) {
+                        authViewModel.insertUser(name.value, email.value, password.value)
+                        Toast.makeText(
+                            mContext,
+                            "Account created successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navController.popBackStack()
+                    } else Toast.makeText(
+                        mContext,
+                        "Please check all filled details",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            )
         }
     }
 
@@ -63,5 +115,7 @@ object CreateNewAC {
 @Preview(showBackground = true)
 @Composable
 fun CreateNewACScreenPreview() {
-    CreateNewAC.CreateNewACScreen(rememberNavController())
+    CreateNewAC.CreateNewACScreen(
+        navController = rememberNavController()
+    )
 }

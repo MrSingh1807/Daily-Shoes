@@ -1,5 +1,6 @@
 package com.example.dailyshoes.ui.activities.authScreens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,12 +47,24 @@ import com.example.dailyshoes.ui.navigation.AuthNav
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.utils.navigateToActivity
+import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 
 object SignIn {
 
+    lateinit var authViewModel: AuthViewModel
+
     @Composable
     fun SignInScreen(navController: NavHostController) {
+
+        val emailErrorVisible = remember { mutableStateOf(false) }
+        val passErrorVisible = remember { mutableStateOf(false) }
+
+        val email = remember { mutableStateOf("") }
+        val password = remember { mutableStateOf("") }
+
+        val mContext = LocalContext.current
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,12 +79,30 @@ object SignIn {
                 modifier = Modifier.padding(top = 50.dp),
             ) {
 
-                AboutUserItem(itemTitle = "Email Address", itemValue = "AlissonBecker@gmail.com")
+                AboutUserItem(
+                    itemTitle = "Email Address", itemValue = "AlissonBecker@gmail.com",
+                    isErrorVisible = emailErrorVisible.value,
+                    editableValue = {
+                        emailErrorVisible.value = if (authViewModel.isValidEmail(it)) {
+                            email.value = it
+                            false
+                        } else true
+
+                    },
+                )
                 Spacer(modifier = Modifier.padding(15.dp))
                 AboutUserItem(
                     itemTitle = "Password",
                     itemValue = " ******** ",
-                    passwordVisibleIcon = R.drawable.ic_password_invisible
+                    passwordVisibleIcon = R.drawable.ic_password_invisible,
+                    isErrorVisible = passErrorVisible.value,
+                    editableValue = {
+                        passErrorVisible.value = if (authViewModel.isValidPassword(it)) {
+                            password.value = it
+                            false
+                        } else true
+                    },
+                    onPasswordVisibleClick = { passErrorVisible.value = false }
                 )
 
                 Row(
@@ -88,9 +124,29 @@ object SignIn {
 
             val mContext = LocalContext.current
             BottomButtons(
-                btmButton1 = "Don’t have an account? ",
-                btmButton2 = "Sign Up for free",
-                signInClick = { mContext.navigateToActivity(HomeActivity::class.java) },
+                authButtonText = "Sign In",
+                bottomButtonText = "Don’t have an account? " to "Sign Up for free",
+                signInClick = {
+                    val condition = !emailErrorVisible.value || !passErrorVisible.value
+                            || email.value.isNotEmpty() || password.value.isNotEmpty()
+                    if (condition) {
+                        if (authViewModel.validateUserSignIn(email.value, password.value)) {
+                            mContext.navigateToActivity(HomeActivity::class.java)
+                        } else Toast.makeText(
+                            mContext,
+                            "Please enter correct Email and Password",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    } else {
+                        Toast.makeText(
+                            mContext,
+                            "Please enter a valid email & password",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                },
                 signInWithGoogleClick = { },
                 alreadyAccountClick = { navController.navigate(AuthNav.SignUp.route) })
 
@@ -127,6 +183,7 @@ object SignIn {
     fun AboutUserItem(
         itemTitle: String = "Full Name",
         itemValue: String = "Mr Singh",
+        isErrorVisible: Boolean = false,
         passwordVisibleIcon: Int? = null,
         editableValue: (String) -> Unit = {},
         onPasswordVisibleClick: () -> Unit = {}
@@ -147,12 +204,17 @@ object SignIn {
                 containerColor = Color.White
             )
 
+            var itemText by remember { mutableStateOf("") }
+
             ConstraintLayout {
-                val (textField, passwordIcon) = createRefs()
+                val (textField, passwordIcon, errorText) = createRefs()
 
                 TextField(
-                    value = itemValue,
-                    onValueChange = { newText -> editableValue.invoke(newText) },
+                    value = itemText,
+                    onValueChange = { newText ->
+                        itemText = newText
+                        editableValue.invoke(newText)
+                    },
                     colors = textFieldColors,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -166,6 +228,27 @@ object SignIn {
                         fontFamily = Poppins_Regular,
                         color = Color.Black,
                     ),
+                    placeholder = {
+                        Text(
+                            text = "Enter Your $itemTitle Here!",
+                            style = TextStyle(color = Color.Gray, fontStyle = FontStyle.Italic)
+                        )
+                    },
+                )
+                val errorTextModifier = if (isErrorVisible) Modifier else Modifier.size(0.dp)
+                Text(
+                    text = "$itemTitle is not valid",
+                    modifier = errorTextModifier
+                        .padding(end = 20.dp)
+                        .constrainAs(errorText) {
+                            bottom.linkTo(textField.bottom)
+                            end.linkTo(textField.end)
+                        },
+                    style = TextStyle(
+                        color = Color.Red,
+                        fontFamily = Poppins_Regular,
+                        fontSize = 10.sp
+                    )
                 )
 
                 val modifier =
@@ -193,8 +276,8 @@ object SignIn {
 
     @Composable
     fun BottomButtons(
-        btmButton1: String,
-        btmButton2: String,
+        authButtonText: String,
+        bottomButtonText: Pair<String, String>,
         signInClick: () -> Unit = {},
         signInWithGoogleClick: () -> Unit = {},
         alreadyAccountClick: () -> Unit = {}
@@ -212,7 +295,7 @@ object SignIn {
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.intro_get_started))
             ) {
                 Text(
-                    text = "Sign In", modifier = Modifier.padding(vertical = 5.dp),
+                    text = authButtonText, modifier = Modifier.padding(vertical = 5.dp),
                     style = TextStyle(fontFamily = Poppins_MEDIUM)
                 )
             }
@@ -229,7 +312,7 @@ object SignIn {
                     contentDescription = "Google Icon"
                 )
                 Text(
-                    text = "Sign in with google",
+                    text = "$authButtonText with google",
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .padding(vertical = 5.dp),
@@ -245,7 +328,7 @@ object SignIn {
                     .padding(top = 20.dp),
             ) {
                 Text(
-                    text = btmButton1,
+                    text = bottomButtonText.first,
                     style = TextStyle(
                         fontFamily = Poppins_Regular,
                         fontSize = 12.sp,
@@ -253,7 +336,7 @@ object SignIn {
                     )
                 )
                 Text(
-                    text = btmButton2,
+                    text = bottomButtonText.second,
                     style = TextStyle(fontFamily = Poppins_Regular, fontSize = 12.sp)
                 )
             }
