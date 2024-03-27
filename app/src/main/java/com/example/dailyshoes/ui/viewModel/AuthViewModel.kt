@@ -31,9 +31,22 @@ class AuthViewModel @Inject constructor(private val repository: LocalDBRepo) : V
         }
     }
 
-    fun forgotPassword(email: String, password: String, updated: (Boolean) -> Unit) {
+
+    fun checkEmailForResetPassword(email: String): Boolean {
+        var isValidated = false
         viewModelScope.launch {
-            repository.updatePassword(email, password, updated)
+            repository.getUsers {
+                it.forEach { user ->
+                    if (user.email == email) isValidated = true
+                }
+            }
+        }
+        return isValidated
+    }
+
+    fun resetPassword(email: String, password: String, isUpdated: () -> Unit) {
+        viewModelScope.launch {
+            repository.updatePassword(email, password, isUpdated)
         }
     }
 

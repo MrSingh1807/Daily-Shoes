@@ -90,8 +90,8 @@ object ProfileScreen {
             )
 
             AboutUserItem()
-            AboutUserItem(itemTitle = "Email", itemValue = "john.tyler@examplepetstore.com")
-            AboutUserItem(itemTitle = "Password", itemValue = "**********")
+            AboutUserItem(itemTitle = "Email", )
+            AboutUserItem(itemTitle = "Password",)
         }
     }
 }

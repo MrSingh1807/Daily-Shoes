@@ -33,17 +33,14 @@ fun AuthNavGraph(authViewModel: AuthViewModel, navController: NavHostController)
         navController = navController,
         startDestination = AuthNav.SignIn.route
     ) {
-        composable(route = AuthNav.SignIn.route) { SignIn.SignInScreen(navController) }
+        composable(route = AuthNav.SignIn.route) {
+            SignIn.SignInScreen(authViewModel, navController)
+        }
         composable(route = AuthNav.SignUp.route) {
-            CreateNewAC.CreateNewACScreen(
-//                authViewModel,
-                navController
-            )
+            CreateNewAC.CreateNewACScreen(authViewModel, navController)
         }
         composable(route = AuthNav.PasswordRecovery.route) {
-            RecoveryPassword.RecoveryPassScreen(
-                navController
-            )
+            RecoveryPassword.RecoveryPassScreen(authViewModel, navController)
         }
     }
 }

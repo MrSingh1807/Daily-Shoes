@@ -35,14 +35,14 @@ class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
         }
     }
 
-    suspend fun updatePassword(email: String, password: String, updated: (Boolean) -> Unit) {
+    suspend fun updatePassword(email: String, password: String, updated: () -> Unit) {
         withContext(Dispatchers.IO) {
             launch { localDb.updateUserPassword(email, password) }.join()
 
             getUsers {
                 it.forEach { user ->
                     if (user.email == email)
-                        if (user.password == password) updated.invoke(true)
+                        if (user.password == password) updated.invoke()
                 }
             }
         }

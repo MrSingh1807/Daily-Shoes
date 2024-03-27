@@ -52,10 +52,10 @@ import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 object SignIn {
 
-    lateinit var authViewModel: AuthViewModel
+    lateinit var authVM: AuthViewModel
 
     @Composable
-    fun SignInScreen(navController: NavHostController) {
+    fun SignInScreen(authViewModel: AuthViewModel, navController: NavHostController) {
 
         val emailErrorVisible = remember { mutableStateOf(false) }
         val passErrorVisible = remember { mutableStateOf(false) }
@@ -80,20 +80,18 @@ object SignIn {
             ) {
 
                 AboutUserItem(
-                    itemTitle = "Email Address", itemValue = "AlissonBecker@gmail.com",
+                    itemTitle = "Email Address",
                     isErrorVisible = emailErrorVisible.value,
                     editableValue = {
                         emailErrorVisible.value = if (authViewModel.isValidEmail(it)) {
                             email.value = it
                             false
                         } else true
-
                     },
                 )
                 Spacer(modifier = Modifier.padding(15.dp))
                 AboutUserItem(
                     itemTitle = "Password",
-                    itemValue = " ******** ",
                     passwordVisibleIcon = R.drawable.ic_password_invisible,
                     isErrorVisible = passErrorVisible.value,
                     editableValue = {
@@ -182,7 +180,6 @@ object SignIn {
     @Composable
     fun AboutUserItem(
         itemTitle: String = "Full Name",
-        itemValue: String = "Mr Singh",
         isErrorVisible: Boolean = false,
         passwordVisibleIcon: Int? = null,
         editableValue: (String) -> Unit = {},
@@ -348,5 +345,5 @@ object SignIn {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    SignIn.SignInScreen(rememberNavController())
+    SignIn.SignInScreen(SignIn.authVM, rememberNavController())
 }

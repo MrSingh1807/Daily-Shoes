@@ -25,10 +25,10 @@ import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 object CreateNewAC {
 
-    lateinit var authViewModel: AuthViewModel
+    lateinit var authVM: AuthViewModel
 
     @Composable
-    fun CreateNewACScreen(/*authViewModel: AuthViewModel,*/ navController: NavHostController) {
+    fun CreateNewACScreen(authViewModel: AuthViewModel, navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +58,6 @@ object CreateNewAC {
                 Spacer(modifier = Modifier.padding(15.dp))
                 SignIn.AboutUserItem(
                     itemTitle = "Email Address",
-                    itemValue = "AlissonBecker@gmail.com",
                     isErrorVisible = emailErrorVisible.value,
                     editableValue = {
                         if (authViewModel.isValidEmail(it)) {
@@ -71,7 +70,6 @@ object CreateNewAC {
                 Spacer(modifier = Modifier.padding(15.dp))
                 SignIn.AboutUserItem(
                     itemTitle = "Password",
-                    itemValue = " ******** ",
                     passwordVisibleIcon = R.drawable.ic_password_invisible,
                     isErrorVisible = passErrorVisible.value,
                     editableValue = {
@@ -116,6 +114,7 @@ object CreateNewAC {
 @Composable
 fun CreateNewACScreenPreview() {
     CreateNewAC.CreateNewACScreen(
+        CreateNewAC.authVM,
         navController = rememberNavController()
     )
 }
