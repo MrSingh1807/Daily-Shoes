@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
+import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.theme.intro_desc_1
 import com.example.dailyshoes.ui.theme.intro_desc_2
@@ -164,7 +165,7 @@ class IntroActivity : ComponentActivity() {
                 ) {
                     Text(
                         text = "Get Started",
-                        fontFamily = Poppins_Regular
+                        fontFamily = Poppins_MEDIUM, color = Color.Black
                     )
                 }
             }

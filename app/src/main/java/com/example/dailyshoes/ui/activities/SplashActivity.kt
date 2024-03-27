@@ -36,8 +36,13 @@ class SplashActivity : ComponentActivity() {
                 Greeting()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         Handler(mainLooper).postDelayed({
+            finish()
             startActivity(Intent(this, IntroActivity::class.java))
         }, 2000)
     }

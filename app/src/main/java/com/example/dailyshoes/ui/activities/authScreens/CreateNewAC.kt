@@ -25,10 +25,8 @@ import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 object CreateNewAC {
 
-    lateinit var authVM: AuthViewModel
-
     @Composable
-    fun CreateNewACScreen(authViewModel: AuthViewModel, navController: NavHostController) {
+    fun CreateNewACScreen(authViewModel: AuthViewModel? = null, navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -36,7 +34,6 @@ object CreateNewAC {
                     colorResource(id = R.color.home_background),
                 ),
         ) {
-
             val emailErrorVisible = remember { mutableStateOf(false) }
             val passErrorVisible = remember { mutableStateOf(false) }
 
@@ -60,7 +57,7 @@ object CreateNewAC {
                     itemTitle = "Email Address",
                     isErrorVisible = emailErrorVisible.value,
                     editableValue = {
-                        if (authViewModel.isValidEmail(it)) {
+                        if (authViewModel!!.isValidEmail(it)) {
                             emailErrorVisible.value = false
                             email.value = it
                         } else emailErrorVisible.value = true
@@ -73,7 +70,7 @@ object CreateNewAC {
                     passwordVisibleIcon = R.drawable.ic_password_invisible,
                     isErrorVisible = passErrorVisible.value,
                     editableValue = {
-                        if (authViewModel.isValidPassword(it)) {
+                        if (authViewModel!!.isValidPassword(it)) {
                             passErrorVisible.value = false
                             password.value = it
                         } else passErrorVisible.value = true
@@ -88,10 +85,10 @@ object CreateNewAC {
                     navController.navigate(AuthNav.SignIn.route)
                 },
                 signInClick = {
-                    val condition = !emailErrorVisible.value || !passErrorVisible.value
-                            || name.value.isNotEmpty() || email.value.isNotEmpty() || password.value.isNotEmpty()
+                    val condition = !emailErrorVisible.value && !passErrorVisible.value
+                            && name.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty()
                     if (condition) {
-                        authViewModel.insertUser(name.value, email.value, password.value)
+                        authViewModel!!.insertUser(name.value, email.value, password.value)
                         Toast.makeText(
                             mContext,
                             "Account created successfully",
@@ -114,7 +111,6 @@ object CreateNewAC {
 @Composable
 fun CreateNewACScreenPreview() {
     CreateNewAC.CreateNewACScreen(
-        CreateNewAC.authVM,
         navController = rememberNavController()
     )
 }

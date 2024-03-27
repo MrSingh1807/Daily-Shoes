@@ -11,6 +11,7 @@ import com.example.dailyshoes.ui.modals.AboutOrder
 import com.example.dailyshoes.ui.modals.User
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,6 +19,8 @@ import javax.inject.Inject
 
 @ViewModelScoped
 class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
+
+    val REPO_TAG = "LOCAL_DB_REPO"
 
     var cartList = mutableStateOf(listOf<AboutOrder>())
 
@@ -29,7 +32,8 @@ class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
 
     suspend fun getUsers(aboutUsers: (List<User>) -> Unit) {
         withContext(Dispatchers.IO) {
-            val users = localDb.getUsers()
+            val users = async { localDb.getUsers() }.await()
+            Log.d(REPO_TAG, "getUsers : $users ")
             aboutUsers.invoke(users)
             Log.d("Local DB", "getUsers: $users")
         }
@@ -38,20 +42,21 @@ class LocalDBRepo @Inject constructor(private val localDb: LocalDBDao) {
     suspend fun updatePassword(email: String, password: String, updated: () -> Unit) {
         withContext(Dispatchers.IO) {
             launch { localDb.updateUserPassword(email, password) }.join()
+            val users = async { localDb.getUsers() }.await()
 
-            getUsers {
-                it.forEach { user ->
-                    if (user.email == email)
-                        if (user.password == password) updated.invoke()
-                }
+            Log.d(REPO_TAG, "updatePassword : $users ")
+            users.forEach { user ->
+                if (user.email == email)
+                    if (user.password == password) updated.invoke()
             }
+
         }
     }
 
     suspend fun getShoes() {
         withContext(Dispatchers.IO) {
             val shoes = localDb.getShoesOnCart()
-            Log.d("Local DB", "getShoes: $shoes")
+            Log.d(REPO_TAG, "getShoes: $shoes")
             withContext(Dispatchers.Main) { cartList.value = shoes }
         }
     }

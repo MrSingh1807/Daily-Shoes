@@ -47,11 +47,8 @@ import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 object RecoveryPassword {
 
-
-    lateinit var authVM: AuthViewModel
-
     @Composable
-    fun RecoveryPassScreen(authViewModel: AuthViewModel, navController: NavHostController) {
+    fun RecoveryPassScreen(authViewModel: AuthViewModel? = null, navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -60,7 +57,7 @@ object RecoveryPassword {
                 ),
         ) {
 
-            var showRecoveryEmail by remember { mutableStateOf(false) }
+            var showRecoveryEmail by remember { mutableStateOf(true) }
 
             val emailErrorVisible = remember { mutableStateOf(false) }
             val passErrorVisible = remember { mutableStateOf(false) }
@@ -92,7 +89,11 @@ object RecoveryPassword {
             ) {
                 Text(
                     text = title1,
-                    style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 25.sp),
+                    style = TextStyle(
+                        fontFamily = Poppins_MEDIUM,
+                        fontSize = 25.sp,
+                        color = Color.Black
+                    ),
                 )
                 Text(
                     text = title2,
@@ -114,7 +115,7 @@ object RecoveryPassword {
                 emailErrorVisible.value,
                 "Email Address is not valid",
                 editableValue = {
-                    emailErrorVisible.value = if (authViewModel.isValidEmail(it)) {
+                    emailErrorVisible.value = if (authViewModel!!.isValidEmail(it)) {
                         email.value = it
                         false
                     } else true
@@ -127,7 +128,7 @@ object RecoveryPassword {
                 passErrorVisible.value,
                 "Your password have at least one letter & number",
                 editableValue = {
-                    passErrorVisible.value = if (authViewModel.isValidPassword(it)) {
+                    passErrorVisible.value = if (authViewModel!!.isValidPassword(it)) {
                         newPassword.value = it
                         false
                     } else true
@@ -139,7 +140,7 @@ object RecoveryPassword {
                 "Your password is not matched",
                 editableValue = {
                     confirmErrorVisible.value =
-                        if (authViewModel.isValidPassword(it) && it == newPassword.value) {
+                        if (authViewModel!!.isValidPassword(it) && it == newPassword.value) {
                             confirmPassword.value = it
                             false
                         } else true
@@ -149,7 +150,7 @@ object RecoveryPassword {
             Button(
                 onClick = {
                     if (showRecoveryEmail) {
-                        if (authViewModel.checkEmailForResetPassword(email = email.value)) {
+                        if (authViewModel!!.checkEmailForResetPassword(email = email.value)) {
                             showRecoveryEmail = false
                         } else {
                             Toast.makeText(mContext, "Please your email first", Toast.LENGTH_LONG)
@@ -157,7 +158,7 @@ object RecoveryPassword {
                         }
                     } else {
                         if (!passErrorVisible.value && !confirmErrorVisible.value && newPassword.value == confirmPassword.value) {
-                            authViewModel.resetPassword(email.value, newPassword.value) {
+                            authViewModel!!.resetPassword(email.value, newPassword.value) {
                                 navController.popBackStack()
                             }
                         }
@@ -190,7 +191,11 @@ object RecoveryPassword {
         ) {
             Text(
                 text = itemTitle,
-                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 20.sp)
+                style = TextStyle(
+                    fontFamily = Poppins_MEDIUM,
+                    fontSize = 20.sp,
+                    color = Color.Black
+                )
             )
             val textFieldColors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
@@ -275,5 +280,5 @@ object RecoveryPassword {
 @Preview(showBackground = true)
 @Composable
 fun RecoveryPasswordPreview() {
-    RecoveryPassword.RecoveryPassScreen(RecoveryPassword.authVM, rememberNavController())
+    RecoveryPassword.RecoveryPassScreen(navController = rememberNavController())
 }

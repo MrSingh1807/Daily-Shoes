@@ -44,6 +44,7 @@ import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.activities.CartActivity.Companion.TitleBar
 import com.example.dailyshoes.ui.activities.HomeActivity
 import com.example.dailyshoes.ui.navigation.AuthNav
+import com.example.dailyshoes.ui.theme.Black
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.utils.navigateToActivity
@@ -52,10 +53,8 @@ import com.example.dailyshoes.ui.viewModel.AuthViewModel
 
 object SignIn {
 
-    lateinit var authVM: AuthViewModel
-
     @Composable
-    fun SignInScreen(authViewModel: AuthViewModel, navController: NavHostController) {
+    fun SignInScreen(authViewModel: AuthViewModel? = null, navController: NavHostController) {
 
         val emailErrorVisible = remember { mutableStateOf(false) }
         val passErrorVisible = remember { mutableStateOf(false) }
@@ -83,7 +82,7 @@ object SignIn {
                     itemTitle = "Email Address",
                     isErrorVisible = emailErrorVisible.value,
                     editableValue = {
-                        emailErrorVisible.value = if (authViewModel.isValidEmail(it)) {
+                        emailErrorVisible.value = if (authViewModel!!.isValidEmail(it)) {
                             email.value = it
                             false
                         } else true
@@ -95,7 +94,7 @@ object SignIn {
                     passwordVisibleIcon = R.drawable.ic_password_invisible,
                     isErrorVisible = passErrorVisible.value,
                     editableValue = {
-                        passErrorVisible.value = if (authViewModel.isValidPassword(it)) {
+                        passErrorVisible.value = if (authViewModel!!.isValidPassword(it)) {
                             password.value = it
                             false
                         } else true
@@ -125,17 +124,17 @@ object SignIn {
                 authButtonText = "Sign In",
                 bottomButtonText = "Don’t have an account? " to "Sign Up for free",
                 signInClick = {
-                    val condition = !emailErrorVisible.value || !passErrorVisible.value
-                            || email.value.isNotEmpty() || password.value.isNotEmpty()
+                    val condition = !emailErrorVisible.value && !passErrorVisible.value
+                            && email.value.isNotEmpty() && password.value.isNotEmpty()
                     if (condition) {
-                        if (authViewModel.validateUserSignIn(email.value, password.value)) {
-                            mContext.navigateToActivity(HomeActivity::class.java)
-                        } else Toast.makeText(
-                            mContext,
-                            "Please enter correct Email and Password",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
+                        authViewModel!!.validateUserSignIn(email.value, password.value) {
+                            if (it) mContext.navigateToActivity(HomeActivity::class.java)
+                            else Toast.makeText(
+                                mContext,
+                                "Please enter correct Email and Password",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         Toast.makeText(
                             mContext,
@@ -165,7 +164,7 @@ object SignIn {
         ) {
             Text(
                 text = title1,
-                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 30.sp),
+                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 30.sp, color = Black),
             )
             Text(
                 text = title2,
@@ -192,7 +191,7 @@ object SignIn {
         ) {
             Text(
                 text = itemTitle,
-                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 20.sp)
+                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 20.sp, color = Black)
             )
             val textFieldColors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
@@ -293,7 +292,7 @@ object SignIn {
             ) {
                 Text(
                     text = authButtonText, modifier = Modifier.padding(vertical = 5.dp),
-                    style = TextStyle(fontFamily = Poppins_MEDIUM)
+                    style = TextStyle(fontFamily = Poppins_MEDIUM, color = Color.Black)
                 )
             }
 
@@ -334,7 +333,7 @@ object SignIn {
                 )
                 Text(
                     text = bottomButtonText.second,
-                    style = TextStyle(fontFamily = Poppins_Regular, fontSize = 12.sp)
+                    style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 12.sp, color = Black)
                 )
             }
         }
@@ -345,5 +344,7 @@ object SignIn {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    SignIn.SignInScreen(SignIn.authVM, rememberNavController())
+    SignIn.SignInScreen(
+        navController = rememberNavController()
+    )
 }
