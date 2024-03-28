@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,25 +41,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.lifecycleScope
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.theme.intro_desc_1
-import com.example.dailyshoes.ui.theme.intro_desc_2
-import com.example.dailyshoes.ui.theme.intro_desc_3
 import com.example.dailyshoes.ui.theme.intro_title_1
-import com.example.dailyshoes.ui.theme.intro_title_2
-import com.example.dailyshoes.ui.theme.intro_title_3
 import com.example.dailyshoes.ui.utils.navigateToActivity
+import com.example.dailyshoes.ui.viewModel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class IntroActivity : ComponentActivity() {
 
-    var textTitle by mutableStateOf(intro_title_1)
-    var textDesc by mutableStateOf(intro_desc_1)
+    private var textTitle by mutableStateOf(intro_title_1)
+    private var textDesc by mutableStateOf(intro_desc_1)
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {

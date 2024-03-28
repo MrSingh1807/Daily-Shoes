@@ -49,6 +49,7 @@ import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_Regular
 import com.example.dailyshoes.ui.utils.navigateToActivity
 import com.example.dailyshoes.ui.viewModel.AuthViewModel
+import kotlinx.coroutines.launch
 
 
 object SignIn {
@@ -128,8 +129,10 @@ object SignIn {
                             && email.value.isNotEmpty() && password.value.isNotEmpty()
                     if (condition) {
                         authViewModel!!.validateUserSignIn(email.value, password.value) {
-                            if (it) mContext.navigateToActivity(HomeActivity::class.java)
-                            else Toast.makeText(
+                            if (it) {
+                                authViewModel.isLoginValidate()
+                                mContext.navigateToActivity(HomeActivity::class.java)
+                            } else Toast.makeText(
                                 mContext,
                                 "Please enter correct Email and Password",
                                 Toast.LENGTH_SHORT

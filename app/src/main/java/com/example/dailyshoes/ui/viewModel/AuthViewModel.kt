@@ -4,6 +4,7 @@ import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dailyshoes.ui.dataStore.LocalDataStore
 import com.example.dailyshoes.ui.modals.User
 import com.example.dailyshoes.ui.repository.LocalDBRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +16,13 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val repository: LocalDBRepo) : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val localPrefDataStore: LocalDataStore,
+    private val repository: LocalDBRepo
+) : ViewModel() {
     val AUTH_TAG = "AUTH_VM_TAG"
+    val checkIsLogin = localPrefDataStore.checkIsLogin
+
     fun isValidEmail(email: CharSequence): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
@@ -52,6 +58,10 @@ class AuthViewModel @Inject constructor(private val repository: LocalDBRepo) : V
         viewModelScope.launch {
             repository.updatePassword(email, password, isUpdated)
         }
+    }
+
+    fun isLoginValidate() {
+        viewModelScope.launch { localPrefDataStore.saveIsLogin(true) }
     }
 
     fun validateUserSignIn(

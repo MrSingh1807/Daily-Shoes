@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.activities.AboutShoeActivity
+import com.example.dailyshoes.ui.activities.CartActivity
 import com.example.dailyshoes.ui.designUtils.CurvedTopLineShape
 import com.example.dailyshoes.ui.modals.Quad
 import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
@@ -101,7 +102,6 @@ object HomeScreen {
             }
 
             Spacer(modifier = Modifier.weight(1f))
-//            BottomNav()
         }
     }
 
@@ -134,6 +134,7 @@ object HomeScreen {
                     text = "Store Location",
                     fontFamily = Poppins_Regular,
                     textAlign = TextAlign.Center,
+                    color = Color.Gray
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -148,12 +149,14 @@ object HomeScreen {
                         text = "Rajiv Chowk, New Delhi",
                         fontFamily = Poppins_Regular,
                         textAlign = TextAlign.Center,
+                        color = Color.Black
                     )
                 }
             }
 
+            val context = LocalContext.current
             Image(
-                modifier = Modifier.clickable { },
+                modifier = Modifier.clickable { context.navigateToActivity(CartActivity::class.java) },
                 painter = painterResource(id = R.drawable.ic_cart),
                 contentDescription = "Drawer"
             )
@@ -314,7 +317,11 @@ object HomeScreen {
         ) {
             Text(
                 text = first,
-                style = TextStyle(fontFamily = Poppins_SEMI_BOLD, fontSize = 15.sp)
+                style = TextStyle(
+                    fontFamily = Poppins_SEMI_BOLD,
+                    fontSize = 15.sp,
+                    color = Color.Black
+                )
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -376,7 +383,8 @@ object HomeScreen {
                     )
                     Text(
                         text = shoeName, style = TextStyle(
-                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp
+                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp,
+                            color = Color.Black
                         ),
                         modifier = Modifier.constrainAs(shoeNameText) {
                             start.linkTo(tagText.start)
@@ -385,7 +393,7 @@ object HomeScreen {
                     )
                     Text(
                         text = "$$shoePrice", style = TextStyle(
-                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp
+                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp, color = Color.Black
                         ), modifier = Modifier
                             .padding(top = 10.dp)
                             .constrainAs(shoePriceText) {
@@ -447,11 +455,19 @@ object HomeScreen {
                 )
                 Text(
                     text = shoeName,
-                    style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 16.sp),
+                    style = TextStyle(
+                        fontFamily = Poppins_MEDIUM,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    ),
                 )
                 Text(
                     text = "$$shoePrice",
-                    style = TextStyle(fontFamily = Poppins_SEMI_BOLD, fontSize = 16.sp)
+                    style = TextStyle(
+                        fontFamily = Poppins_SEMI_BOLD,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
                 )
             }
             Image(painter = painterResource(id = newArrivalShoeImage), contentDescription = "")

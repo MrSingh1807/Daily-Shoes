@@ -105,6 +105,7 @@ object FavouriteScreen {
                 text = "Favourite",
                 fontFamily = Poppins_Regular,
                 textAlign = TextAlign.Center,
+                color = Color.Black
             )
 
             Image(
@@ -172,7 +173,7 @@ object FavouriteScreen {
                 )
                 Text(
                     text = shoeName, style = TextStyle(
-                        fontFamily = Poppins_MEDIUM, fontSize = 16.sp
+                        fontFamily = Poppins_MEDIUM, fontSize = 16.sp, color = Color.Black
                     ),
                     modifier = modifier.constrainAs(shoeNameText) {
                         start.linkTo(tagText.start)
@@ -189,7 +190,7 @@ object FavouriteScreen {
                     }) {
                     Text(
                         text = "$$shoePrice", style = TextStyle(
-                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp
+                            fontFamily = Poppins_MEDIUM, fontSize = 16.sp, color = Color.Black
                         )
                     )
                     Spacer(modifier = Modifier.weight(1f))

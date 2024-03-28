@@ -6,6 +6,7 @@ import android.os.Handler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,12 +22,18 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
+import com.example.dailyshoes.ui.viewModel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
+
+    private val authVM: AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,8 +49,13 @@ class SplashActivity : ComponentActivity() {
         super.onResume()
 
         Handler(mainLooper).postDelayed({
+            lifecycleScope.launch {
+                authVM.checkIsLogin.collect {
+                    if (it) startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                    else startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+                }
+            }
             finish()
-            startActivity(Intent(this, IntroActivity::class.java))
         }, 2000)
     }
 

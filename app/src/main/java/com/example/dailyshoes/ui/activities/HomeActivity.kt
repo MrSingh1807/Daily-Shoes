@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +21,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.dailyshoes.R
 import com.example.dailyshoes.ui.navigation.HomeBottomNav
 import com.example.dailyshoes.ui.navigation.HomeBottomNavGraph
 import com.example.dailyshoes.ui.theme.DailyShoesTheme
@@ -56,10 +61,9 @@ class HomeActivity : ComponentActivity() {
             HomeBottomNav.Notification,
             HomeBottomNav.Profile
         )
-//        val navBackStackEntry = navController.currentBackStackEntry
-//    val currentDestination = navBackStackEntry?.destination
 
-        var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination?.route
 
         NavigationBar(
             modifier = Modifier
@@ -70,12 +74,24 @@ class HomeActivity : ComponentActivity() {
         ) {
             screenLists.forEachIndexed { index, screen ->
                 NavigationBarItem(
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = colorResource(id = R.color.intro_get_started),
+                        unselectedIconColor = Color.Black,
+                        selectedIconColor = Color.Black,
+                        unselectedTextColor = Color.Black,
+                        selectedTextColor = colorResource(id = R.color.intro_get_started)
+                    ),
                     label = { Text(text = screen.title) },
-                    selected = selectedItemIndex == index,
+                    selected = currentDestination == screen.route,
                     onClick = {
-                        if (selectedItemIndex != index) {
-                            selectedItemIndex = index
-                            navController.navigate(screen.route)
+                        navController.navigate(screen.route) {
+                            popUpTo(route = HomeBottomNav.Home.route) {
+                                inclusive = false
+                                saveState = true
+                            }
+
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     },
                     icon = {
@@ -87,11 +103,12 @@ class HomeActivity : ComponentActivity() {
 
             }
         }
-
-//    selected = currentDestination?.hierarchy?.any {
-//        it.route == screen.route
-//    } == true,
-
     }
 
+
+    @Preview(showBackground = true)
+    @Composable
+    fun ShowHomePreview() {
+        BottomHomeBar(navController = rememberNavController())
+    }
 }

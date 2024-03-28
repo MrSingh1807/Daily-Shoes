@@ -38,7 +38,7 @@ import com.example.dailyshoes.ui.theme.Poppins_MEDIUM
 import com.example.dailyshoes.ui.theme.Poppins_SEMI_BOLD
 
 object NotificationScreen {
-    
+
 
     @Composable
     fun Notification() {
@@ -86,6 +86,7 @@ object NotificationScreen {
                 text = "Notifications",
                 fontFamily = Poppins_MEDIUM,
                 textAlign = TextAlign.Center,
+                color = Color.Black
             )
             Text(
                 modifier = Modifier
@@ -114,7 +115,11 @@ object NotificationScreen {
         ) {
             Text(
                 text = day,
-                style = TextStyle(fontFamily = Poppins_SEMI_BOLD, fontSize = 16.sp),
+                style = TextStyle(
+                    fontFamily = Poppins_SEMI_BOLD,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                ),
                 modifier = Modifier.padding(start = 8.dp)
             )
 
@@ -162,7 +167,11 @@ object NotificationScreen {
             }
 
             Text(text = "We Have New \nProducts With Offers",
-                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 14.sp),
+                style = TextStyle(
+                    fontFamily = Poppins_MEDIUM,
+                    fontSize = 14.sp,
+                    color = Color.Black
+                ),
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .constrainAs(description) {
@@ -179,7 +188,11 @@ object NotificationScreen {
                 }) {
                 Text(
                     text = "$ $newPrice",
-                    style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 16.sp),
+                    style = TextStyle(
+                        fontFamily = Poppins_MEDIUM,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    ),
                 )
                 Text(
                     text = "$ $defaultPrice", modifier = Modifier.padding(start = 20.dp),

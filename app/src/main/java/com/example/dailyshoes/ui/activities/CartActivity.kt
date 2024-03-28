@@ -46,7 +46,7 @@ import java.text.DecimalFormat
 @AndroidEntryPoint
 class CartActivity : BaseComposeActivity() {
 
-    val mViewModel: CartVM by viewModels()
+    private val mViewModel: CartVM by viewModels()
 
     @Composable
     override fun InitScreen() {
@@ -190,6 +190,7 @@ class CartActivity : BaseComposeActivity() {
                     text = title,
                     fontFamily = Poppins_MEDIUM,
                     textAlign = TextAlign.Center,
+                    color = Color.Black
                 )
 
                 val height = if (img2 != null) 50.dp else 0.dp
@@ -292,7 +293,7 @@ class CartActivity : BaseComposeActivity() {
             }
         }
 
-        fun roundOffDecimal(number: Double): Double {
+        private fun roundOffDecimal(number: Double): Double {
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.CEILING
             return df.format(number).toDouble()

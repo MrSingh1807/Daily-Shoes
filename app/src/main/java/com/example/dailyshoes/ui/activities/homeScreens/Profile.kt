@@ -85,13 +85,17 @@ object ProfileScreen {
 
             Text(
                 text = profileName,
-                style = TextStyle(fontFamily = Poppins_MEDIUM, fontSize = 24.sp),
+                style = TextStyle(
+                    fontFamily = Poppins_MEDIUM,
+                    fontSize = 24.sp,
+                    color = Color.Black
+                ),
                 modifier = Modifier.padding(vertical = 15.dp)
             )
 
             AboutUserItem()
-            AboutUserItem(itemTitle = "Email", )
-            AboutUserItem(itemTitle = "Password",)
+            AboutUserItem(itemTitle = "Email")
+            AboutUserItem(itemTitle = "Password")
         }
     }
 }
